@@ -10,7 +10,6 @@ namespace DataAccessLayer.Concrete
 {
     public class Context : DbContext
     {
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=password");
