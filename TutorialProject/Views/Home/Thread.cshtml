@@ -1,0 +1,26 @@
+﻿@using EntityLayer.Concrete;
+@model Thread
+
+@{
+    if (Model != null)
+    {
+        ViewData["Title"] = Model.Title;
+        <article>
+            <div class="col-md-12">
+                <h2>@Model.Title</h2>
+                <p class="lead">@Model.Content</p>
+                <div class="h5 text-muted"> @DateTime.Now.ToString("MMM dd, yyyy")</div>
+            </div>
+        </article>
+    }
+    else
+    {
+        <article>
+            <div class="col-md-12">
+                <h2>Thread Not Found</h2>
+            </div>
+        </article>
+    }
+
+
+}
