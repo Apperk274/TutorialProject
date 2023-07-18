@@ -15,7 +15,7 @@ namespace DataAccessLayer.Concrete
         {
             optionsBuilder.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=password");
         }
-        public DbSet<Post> Posts { get; set; }
+        public DbSet<Thread> Threads { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<User> Users { get; set; }
     }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EntityLayer.Concrete
 {
-    public class Post
+    public class Thread
     {
         [Key] public int Id { get; set; }
         public string Title { get; set; }
