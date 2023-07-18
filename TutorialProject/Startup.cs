@@ -49,8 +49,13 @@ namespace TutorialProject
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "Thread",
+                    pattern: "Thread/{id?}",
+                    defaults: new { controller = "Thread", action = "Index" }
+                    );
+                endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Error}/{action=Index}/{id?}");
             });
         }
     }
