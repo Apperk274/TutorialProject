@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories
 {
-    public class ThreadDal : BaseDal<User>
+    public class ThreadDal : BaseDal<Thread>
     {
     }
 }
