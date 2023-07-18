@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataAccessLayer.Repositories;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace TutorialProject.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        readonly ThreadDal threadDal = new();
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -21,6 +23,11 @@ namespace TutorialProject.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+        public IActionResult Thread(int id)
+        {
+            var thread = threadDal.Get(id);
+            return View(thread);
         }
 
         public IActionResult Privacy()
