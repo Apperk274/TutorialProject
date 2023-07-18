@@ -1,43 +1,25 @@
 ﻿using DataAccessLayer.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using TutorialProject.Models;
 
 namespace TutorialProject.Controllers
 {
-    public class HomeController : Controller
+    public class ThreadController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<ThreadController> _logger;
         readonly ThreadDal threadDal = new();
 
-        public HomeController(ILogger<HomeController> logger)
+        public ThreadController(ILogger<ThreadController> logger)
         {
             _logger = logger;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-        public IActionResult Thread(int id)
+        public IActionResult Index(int id)
         {
             var thread = threadDal.Get(id);
             return View(thread);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        public IActionResult Test()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
