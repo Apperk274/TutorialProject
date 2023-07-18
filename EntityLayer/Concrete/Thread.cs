@@ -16,5 +16,7 @@ namespace EntityLayer.Concrete
         public Category Category { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
+        public int? ParentId { get; set; }
+        public virtual Thread Parent { get; set; }
     }
 }
