@@ -22,7 +22,7 @@ namespace TutorialProject.Controllers
 
         public IActionResult List()
         {
-            var threads = _threadDal.GetAll();
+            var threads = _threadDal.GetList();
             return View(threads);
         }
 

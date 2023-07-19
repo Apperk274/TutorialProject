@@ -14,9 +14,14 @@ namespace DataAccessLayer.Repositories
         public ThreadDal(Context c) : base(c)
         {
         }
-        public new List<Thread> GetAll()
+        public List<Thread> GetList()
         {
-            return _c.Set<Thread>().Include(t => t.User).Include(t => t.Category).OrderByDescending(t => t.CreatedAt).ToList();
+            return _c.Set<Thread>()
+                .Where(t => t.ParentId == null)
+                .Include(t => t.User)
+                .Include(t => t.Category)
+                .OrderByDescending(t => t.CreatedAt)
+                .ToList();
         }
         public int GetNumOfCommentsOfThread(int threadId)
         {
