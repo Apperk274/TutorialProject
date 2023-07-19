@@ -16,7 +16,7 @@ namespace DataAccessLayer.Repositories
         }
         public new List<Thread> GetAll()
         {
-            return _c.Set<Thread>().Include(t => t.User).Include(t => t.Category).ToList();
+            return _c.Set<Thread>().Include(t => t.User).Include(t => t.Category).OrderByDescending(t => t.CreatedAt).ToList();
         }
         public List<Thread> GetCommentsOfThread(int parentId)
         {
