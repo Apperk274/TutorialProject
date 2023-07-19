@@ -1,4 +1,4 @@
-﻿namespace DTOLayer
+﻿namespace DTOLayer.ReqDTO
 {
     public class RegisterReqDTO
     {
