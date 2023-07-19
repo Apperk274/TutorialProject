@@ -1,13 +1,11 @@
+using BusinessLayer;
+using DataAccessLayer.Concrete;
+using DataAccessLayer.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace TutorialProject
 {
@@ -24,6 +22,11 @@ namespace TutorialProject
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddTransient<Context>();
+            services.AddTransient<AuthService>();
+            services.AddScoped<ThreadDal>();
+            services.AddScoped<UserDal>();
+            services.AddScoped<CategoryDal>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
