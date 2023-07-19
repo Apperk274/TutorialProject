@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Repositories;
+﻿using DataAccessLayer.Concrete;
+using DataAccessLayer.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,11 +14,12 @@ namespace TutorialProject.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        readonly ThreadDal threadDal = new();
+        readonly ThreadDal _threadDal;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ThreadDal threadDal)
         {
             _logger = logger;
+            _threadDal = threadDal;
         }
 
         public IActionResult Index()
@@ -26,7 +28,7 @@ namespace TutorialProject.Controllers
         }
         public IActionResult Thread(int id)
         {
-            var thread = threadDal.Get(id);
+            var thread = _threadDal.Get(id);
             return View(thread);
         }
 
