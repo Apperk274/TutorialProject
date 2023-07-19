@@ -29,13 +29,15 @@ namespace DataAccessLayer.Repositories
         {
             return _c.Set<T>().Where(predicate).ToList();
         }
-        public void Insert(T t)
+        public T Insert(T t)
         {
-            _c.Add(t);
+            var entity= _c.Add(t).Entity;
+            _c.SaveChanges();
+            return entity;
         }
-        public void Update(T t)
+        public T Update(T t)
         {
-            _c.Update(t);
+            return _c.Update(t).Entity;
         }
         public void Delete(T t)
         {
