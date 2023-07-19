@@ -16,7 +16,7 @@
                     <p class="card-text mb-auto text-truncate-multiline">
                         @thread.Content
                     </p>
-                    <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
+                    <a asp-controller="Thread" asp-action="Details" asp-route-id="@thread.Id" class="icon-link gap-1 icon-link-hover stretched-link">
                         Continue reading
                     </a>
                 </div>
