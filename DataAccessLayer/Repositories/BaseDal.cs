@@ -1,35 +1,45 @@
 ﻿using DataAccessLayer.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace DataAccessLayer.Repositories
 {
     public class BaseDal<T> where T : class
     {
+        private readonly Context _c;
+        public BaseDal(Context c)
+        {
+            _c = c;
+        }
         public T Get(int id)
         {
-            using var c = new Context();
-            return c.Set<T>().Find(id);
+            return _c.Set<T>().Find(id);
+        }
+        public T GetBy(Expression<Func<T, bool>> predicate)
+        {
+            return _c.Set<T>().FirstOrDefault(predicate);
         }
         public List<T> GetAll()
         {
-            using var c = new Context();
-            return c.Set<T>().ToList();
+            return _c.Set<T>().ToList();
+        }
+        public List<T> GetAllBy(Expression<Func<T, bool>> predicate)
+        {
+            return _c.Set<T>().Where(predicate).ToList();
         }
         public void Insert(T t)
         {
-            using var c = new Context();
-            c.Add(t);
+            _c.Add(t);
         }
         public void Update(T t)
         {
-            using var c = new Context();
-            c.Update(t);
+            _c.Update(t);
         }
         public void Delete(T t)
         {
-            using var c = new Context();
-            c.Remove(t);
+            _c.Remove(t);
         }
     }
 }
