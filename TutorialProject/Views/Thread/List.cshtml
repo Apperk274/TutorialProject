@@ -1,0 +1,36 @@
+﻿@using EntityLayer.Concrete;
+@model List<Thread>
+
+<div class="container">
+    <div class="row">
+        @foreach (var thread in Model)
+        {
+            <div class="col-md-4">
+                <div class="card mb-4 p-4 shadow-sm">
+                    <div class="d-flex justify-content-between">
+                        <strong class="d-inline mb-2">@thread.Category.Name</strong>
+                        <span class="d-inline mb-2">@thread.User.Name</span>
+                    </div>
+                    <h3 class="mb-0">@thread.Title</h3>
+                    <div class="mb-1 text-body-secondary">@thread.CreatedAt.ToString("d MMM yyyy")</div>
+                    <p class="card-text mb-auto text-truncate-multiline">
+                        @thread.Content
+                    </p>
+                    <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
+                        Continue reading
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+<style>
+    .text-truncate-multiline {
+        -webkit-line-clamp: 4;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>

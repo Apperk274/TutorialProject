@@ -17,7 +17,13 @@ namespace TutorialProject.Controllers
             _threadDal = threadDal;
         }
 
-        public IActionResult Index(int id)
+        public IActionResult List()
+        {
+            var threads = _threadDal.GetAll();
+            return View(threads);
+        }
+
+        public IActionResult Details(int id)
         {
             var thread = _threadDal.Get(id);
             return View(thread);
