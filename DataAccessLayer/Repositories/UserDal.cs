@@ -1,4 +1,5 @@
-﻿using EntityLayer.Concrete;
+﻿using DataAccessLayer.Concrete;
+using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,8 @@ namespace DataAccessLayer.Repositories
 {
     public class UserDal : BaseDal<User>
     {
+        public UserDal(Context c) : base(c)
+        {
+        }
     }
 }
