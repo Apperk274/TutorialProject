@@ -9,16 +9,17 @@ namespace TutorialProject.Controllers
     public class ThreadController : Controller
     {
         private readonly ILogger<ThreadController> _logger;
-        readonly ThreadDal threadDal = new();
+        readonly ThreadDal _threadDal;
 
-        public ThreadController(ILogger<ThreadController> logger)
+        public ThreadController(ILogger<ThreadController> logger, ThreadDal threadDal)
         {
             _logger = logger;
+            _threadDal = threadDal;
         }
 
         public IActionResult Index(int id)
         {
-            var thread = threadDal.Get(id);
+            var thread = _threadDal.Get(id);
             return View(thread);
         }
 
