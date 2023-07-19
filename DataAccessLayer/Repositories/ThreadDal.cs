@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Concrete;
 using EntityLayer.Concrete;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,10 @@ namespace DataAccessLayer.Repositories
     {
         public ThreadDal(Context c) : base(c)
         {
+        }
+        public new List<Thread> GetAll()
+        {
+            return _c.Set<Thread>().Include(t => t.User).Include(t => t.Category).ToList();
         }
         public List<Thread> GetCommentsOfThread(int parentId)
         {
