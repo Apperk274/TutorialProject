@@ -8,4 +8,8 @@
     <Folder Include="ResDTO\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EntityLayer\EntityLayer.csproj" />
+  </ItemGroup>
+
 </Project>

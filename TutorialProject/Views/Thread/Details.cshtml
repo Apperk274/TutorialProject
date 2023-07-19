@@ -1,17 +1,19 @@
 ﻿@using EntityLayer.Concrete;
-@model Thread
+@using DTOLayer.ResDTO;
+@model ThreadResDto;
 
 @{
     if (Model != null)
     {
-        ViewData["Title"] = Model.Title;
+        ViewData["Title"] = Model.Thread.Title;
         <article>
             <div class="col-md-12">
-                <h2>@Model.Title</h2>
-                <p class="lead" style="white-space: pre-line">@Model.Content</p>
-                <div class="h5 text-muted"> @Model.CreatedAt.ToString("F")</div>
+                <h2>@Model.Thread.Title</h2>
+                <p class="lead" style="white-space: pre-line">@Model.Thread.Content</p>
+                <div class="h5 text-muted"> @Model.Thread.CreatedAt.ToString("F")</div>
             </div>
         </article>
+        <button type="button" class="btn">Yorumlar (@Model.NumOfComments)</button>
     }
     else
     {

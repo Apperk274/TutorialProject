@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Repositories;
+﻿using BusinessLayer;
+using DataAccessLayer.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
@@ -9,12 +10,14 @@ namespace TutorialProject.Controllers
     public class ThreadController : Controller
     {
         private readonly ILogger<ThreadController> _logger;
-        readonly ThreadDal _threadDal;
+        private readonly ThreadDal _threadDal;
+        private readonly ThreadService _threadService;
 
-        public ThreadController(ILogger<ThreadController> logger, ThreadDal threadDal)
+        public ThreadController(ILogger<ThreadController> logger, ThreadDal threadDal, ThreadService threadService)
         {
             _logger = logger;
             _threadDal = threadDal;
+            _threadService = threadService;
         }
 
         public IActionResult List()
@@ -25,8 +28,8 @@ namespace TutorialProject.Controllers
 
         public IActionResult Details(int id)
         {
-            var thread = _threadDal.Get(id);
-            return View(thread);
+            var threadDetails = _threadService.GetThreadDetails(id);
+            return View(threadDetails);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

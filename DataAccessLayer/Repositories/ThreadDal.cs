@@ -18,9 +18,13 @@ namespace DataAccessLayer.Repositories
         {
             return _c.Set<Thread>().Include(t => t.User).Include(t => t.Category).OrderByDescending(t => t.CreatedAt).ToList();
         }
-        public List<Thread> GetCommentsOfThread(int parentId)
+        public int GetNumOfCommentsOfThread(int threadId)
         {
-            return GetAllBy(t => t.ParentId.Equals(parentId));
+            return _c.Set<Thread>().Where(t => t.ParentId.Equals(threadId)).Count();
+        }
+        public List<Thread> GetCommentsOfThread(int threadId)
+        {
+            return GetAllBy(t => t.ParentId.Equals(threadId));
         }
     }
 }
