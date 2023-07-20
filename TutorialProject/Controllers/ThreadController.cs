@@ -20,6 +20,13 @@ namespace TutorialProject.Controllers
             _threadService = threadService;
         }
 
+        [HttpGet]
+        public JsonResult Comments(int id)
+        {
+            var comments = _threadDal.GetCommentsOfThread(id);
+            return Json(comments);
+        }
+
         public IActionResult List()
         {
             var threads = _threadDal.GetList();

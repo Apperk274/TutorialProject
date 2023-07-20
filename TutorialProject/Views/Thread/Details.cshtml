@@ -3,17 +3,20 @@
 @model ThreadResDto;
 
 @{
-    bool deneme = false;
     if (Model != null)
     {
         ViewData["Title"] = Model.Thread.Title;
+        bool deneme = false;
         <article>
             <h2>@Model.Thread.Title</h2>
             <p class="lead" style="white-space: pre-line">@Model.Thread.Content</p>
             <div class="h5 text-muted"> @Model.Thread.CreatedAt.ToString("F")</div>
         </article>
         <span>Yorumlar (@Model.NumOfComments)</span>
-        <i style="cursor: pointer" onclick="" class="bi bi-caret-down-square"></i>
+        <i style="cursor: pointer" onclick="showComments()" class="bi bi-caret-down-square"></i>
+        <ul id="commentsContainer">
+            <!-- Comments -->
+        </ul>
     }
     else
     {
@@ -23,12 +26,32 @@
             </div>
         </article>
     }
-
-    <script defer>
-        function showComments() {
-
-        }
-    </script>
-
-
 }
+
+<script defer type="text/javascript">
+    function showComments() {
+        const commentTemplate = document.querySelector("template#comment")
+        const commentsContainerEl = document.querySelector("#commentsContainer")
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("Comments")/@Model.Thread.Id",
+            dataType: "json",
+            success: function (comments) {
+                for (comment of comments) {
+                    console.log(comment.title)
+                    const commentEl = commentTemplate.content.cloneNode(true)
+                    commentEl.querySelector("li").innerText = comment.title
+                    console.log(commentEl)
+                    commentsContainerEl.appendChild(commentEl)
+                }
+            },
+            error: function (req, status, error) {
+                console.log(msg);
+            }
+        });
+    }
+</script>
+
+<template id="comment">
+    <li></li>
+</template>
