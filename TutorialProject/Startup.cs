@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using VoteApi;
+using VotesApi.Services;
 
 namespace TutorialProject
 {
@@ -23,6 +26,7 @@ namespace TutorialProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Identity manager
             services.AddIdentity<AppUser, IdentityRole>(_ =>
             {
                 _.Password.RequiredLength = 6; //En az kaç karakterli olmasý gerektiðini belirtiyoruz.
@@ -34,9 +38,14 @@ namespace TutorialProject
             .AddEntityFrameworkStores<Context>()
             .AddDefaultTokenProviders();
 
+            // Mongo db config
+            services.Configure<VoteDbSettings>(Configuration.GetSection(nameof(VoteDbSettings)));
+            services.AddSingleton(sp => sp.GetRequiredService<IOptions<VoteDbSettings>>().Value);
+
             services.AddControllersWithViews();
             services.AddTransient<Context>();
             services.AddTransient<ThreadService>();
+            services.AddTransient<VoteService>(); // maybe singleton idk
             services.AddScoped<ThreadDal>();
             services.AddScoped<UserDal>();
             services.AddScoped<CategoryDal>();
