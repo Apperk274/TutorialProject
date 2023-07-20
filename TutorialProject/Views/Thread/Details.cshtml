@@ -3,17 +3,17 @@
 @model ThreadResDto;
 
 @{
+    bool deneme = false;
     if (Model != null)
     {
         ViewData["Title"] = Model.Thread.Title;
         <article>
-            <div class="col-md-12">
-                <h2>@Model.Thread.Title</h2>
-                <p class="lead" style="white-space: pre-line">@Model.Thread.Content</p>
-                <div class="h5 text-muted"> @Model.Thread.CreatedAt.ToString("F")</div>
-            </div>
+            <h2>@Model.Thread.Title</h2>
+            <p class="lead" style="white-space: pre-line">@Model.Thread.Content</p>
+            <div class="h5 text-muted"> @Model.Thread.CreatedAt.ToString("F")</div>
         </article>
-        <button type="button" class="btn">Yorumlar (@Model.NumOfComments)</button>
+        <span>Yorumlar (@Model.NumOfComments)</span>
+        <i style="cursor: pointer" onclick="" class="bi bi-caret-down-square"></i>
     }
     else
     {
@@ -23,6 +23,12 @@
             </div>
         </article>
     }
+
+    <script defer>
+        function showComments() {
+
+        }
+    </script>
 
 
 }
