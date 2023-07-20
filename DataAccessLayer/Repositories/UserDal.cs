@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories
 {
-    public class UserDal : BaseDal<User>
+    public class UserDal : BaseDal<AppUser>
     {
         public UserDal(Context c) : base(c)
         {

@@ -1,6 +1,7 @@
 using BusinessLayer;
 using DataAccessLayer.Concrete;
 using DataAccessLayer.Repositories;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -22,15 +23,10 @@ namespace TutorialProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentity<IdentityUser, IdentityRole>()
-       .AddEntityFrameworkStores<Context>()
-       .AddDefaultTokenProviders();
+            services.AddIdentity<AppUser, IdentityRole>()
+            .AddEntityFrameworkStores<Context>()
+            .AddDefaultTokenProviders();
 
-            // Configure authentication options
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Customize your authentication settings if needed
-            });
             services.AddControllersWithViews();
             services.AddTransient<Context>();
             services.AddTransient<AuthService>();

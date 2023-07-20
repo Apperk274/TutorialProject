@@ -25,24 +25,7 @@ namespace TutorialProject.Controllers
         [HttpPost]
         public IActionResult Register(RegisterReqDTO registerReqDTO)
         {
-            User.
-            try
-            {
-                var user = _authService.Register(registerReqDTO);
-                LogInReqDTO loginReq = new()
-                {
-                    Email = user.Email,
-                    Password = user.Password,
-                };
-                _authService.LogIn(loginReq);
-                return RedirectToAction("Thread");
-
-            }
-            catch
-            {
-
-                return View();
-            }
+            return null;
         }
     }
 }

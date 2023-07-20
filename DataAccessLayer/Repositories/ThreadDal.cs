@@ -18,7 +18,7 @@ namespace DataAccessLayer.Repositories
         {
             return _c.Set<Thread>()
                 .Where(t => t.ParentId == null)
-                .Include(t => t.User)
+                .Include(t => t.AppUser)
                 .Include(t => t.Category)
                 .OrderByDescending(t => t.CreatedAt)
                 .ToList();

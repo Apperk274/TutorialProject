@@ -16,8 +16,8 @@ namespace EntityLayer.Concrete
         public DateTime CreatedAt { get; set; }
         public int? CategoryId { get; set; }
         public virtual Category Category { get; set; }
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public int AppUserId { get; set; }
+        public AppUser AppUser { get; set; }
         public int? ParentId { get; set; }
         public virtual Thread Parent { get; set; }
     }
