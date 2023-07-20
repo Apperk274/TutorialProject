@@ -23,7 +23,14 @@ namespace TutorialProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentity<AppUser, IdentityRole>()
+            services.AddIdentity<AppUser, IdentityRole>(_ =>
+            {
+                _.Password.RequiredLength = 6; //En az kaç karakterli olmasý gerektiðini belirtiyoruz.
+                _.Password.RequireNonAlphanumeric = false;//Alfanumerik zorunluluðunu kaldýrýyoruz.
+                _.Password.RequireLowercase = false;//Küçük harf zorunluluðunu kaldýrýyoruz.
+                _.Password.RequireUppercase = false;//Büyük harf zorunluluðunu kaldýrýyoruz.
+                _.Password.RequireDigit = false;//0-9 arasý sayýsal karakter zorunluluðunu kaldýrýyoruz.
+            })
             .AddEntityFrameworkStores<Context>()
             .AddDefaultTokenProviders();
 
