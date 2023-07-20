@@ -36,7 +36,6 @@ namespace TutorialProject
 
             services.AddControllersWithViews();
             services.AddTransient<Context>();
-            services.AddTransient<AuthService>();
             services.AddTransient<ThreadService>();
             services.AddScoped<ThreadDal>();
             services.AddScoped<UserDal>();
