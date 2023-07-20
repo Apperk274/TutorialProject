@@ -24,6 +24,7 @@ namespace TutorialProject
             services.AddControllersWithViews();
             services.AddTransient<Context>();
             services.AddTransient<AuthService>();
+            services.AddTransient<ThreadService>();
             services.AddScoped<ThreadDal>();
             services.AddScoped<UserDal>();
             services.AddScoped<CategoryDal>();
@@ -52,9 +53,14 @@ namespace TutorialProject
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "Thread",
+                    name: "Threads List",
+                    pattern: "",
+                    defaults: new { controller = "Thread", action = "List" }
+                    );
+                endpoints.MapControllerRoute(
+                    name: "Thread Details",
                     pattern: "Thread/{id?}",
-                    defaults: new { controller = "Thread", action = "Index" }
+                    defaults: new { controller = "Thread", action = "Details" }
                     );
                 endpoints.MapControllerRoute(
                     name: "default",

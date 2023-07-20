@@ -8,7 +8,7 @@ namespace DataAccessLayer.Repositories
 {
     public class BaseDal<T> where T : class
     {
-        private readonly Context _c;
+        protected readonly Context _c;
         public BaseDal(Context c)
         {
             _c = c;
