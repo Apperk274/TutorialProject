@@ -17,7 +17,7 @@ namespace DataAccessLayer.Concrete
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<AppUser>().ToTable("Users");
+            modelBuilder.Entity<AppUser>().ToTable("AppUsers");
             modelBuilder.Entity<Thread>()
                 .Property(t => t.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
