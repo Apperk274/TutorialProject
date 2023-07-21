@@ -42,6 +42,7 @@ function createCommentEl() {
     commentEl.querySelector("#user").innerText = comment.appUser.name
     commentEl.querySelector("#likeCount").innerText = comment.appUserId
     commentEl.querySelector("#dislikeCount").innerText = comment.appUserId
+    commentEl.querySelector("#createdAt").innerText = new Date(comment.createdAt).toLocaleDateString()
     return commentEl
 }
 
