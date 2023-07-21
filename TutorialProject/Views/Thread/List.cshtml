@@ -12,16 +12,19 @@
                 <div class="card mb-4 p-4 shadow-sm">
                     <div class="d-flex justify-content-between">
                         <strong class="d-inline mb-2">@thread.Category.Name</strong>
-                        <span class="d-inline mb-2">@thread.AppUser.Name</span>
+                        <span class="d-inline mb-2">@thread.AppUser.Name[0]. @thread.AppUser.Surname</span>
                     </div>
-                    <h3 class="mb-0">@thread.Title</h3>
-                    <div class="mb-1 text-body-secondary">@thread.CreatedAt.ToString("d MMM yyyy")</div>
+                    <h3>@thread.Title</h3>
                     <p class="card-text mb-auto text-truncate-multiline">
                         @thread.Content
                     </p>
-                    <a asp-controller="Thread" asp-action="Details" asp-route-id="@thread.Id" class="icon-link gap-1 icon-link-hover stretched-link">
-                        Continue reading
-                    </a>
+                    <div class="d-flex justify-content-between mt-2">
+                        <a asp-controller="Thread" asp-action="Details" asp-route-id="@thread.Id" class="icon-link gap-1 icon-link-hover stretched-link">
+                            Continue reading
+                        </a>
+                        <span class="mb-1 text-body-secondary">@thread.CreatedAt.ToString("d MMM yyyy")</span>
+                    </div>
+
                 </div>
             </div>
         }

@@ -1,20 +1,37 @@
-﻿@using EntityLayer.Concrete;
-@using DTOLayer.ResDTO;
+@using EntityLayer.Concrete;
 @model ThreadViewModel;
 
 @{
-    bool deneme = false;
     if (Model != null)
     {
         ViewData["Title"] = Model.Thread.Title;
         <article>
+            <h4>@Model.Thread.Category.Name</h4>
             <h2>@Model.Thread.Title</h2>
             <p class="lead" style="white-space: pre-line">@Model.Thread.Content</p>
-            <div class="h5 text-muted"> @Model.Thread.CreatedAt.ToString("F")</div>
+            <div class="h5 text-muted d-flex justify-content-between">
+                <span>
+                    @Model.Thread.CreatedAt.ToString("F")
+                </span>
+                <span>
+                    @Model.Thread.AppUser.Name @Model.Thread.AppUser.Surname
+                </span>
+            </div>
         </article>
+        <div class="card p-3 mb-3" style="background-color: #f8f9fa;">
+            <label class="form-label" for="newCommentInput">Yorum yap:</label>
+            <textarea class="form-control" id="newCommentInput" rows="4"
+                      style="background: #fff;"></textarea>
+            <div class="mt-2">
+                <button type="button" class="btn btn-primary btn-sm">Gönder</button>
+            </div>
+        </div>
         <div>@Model.UpVotes - @Model.DownVotes</div>
         <span>Yorumlar (@Model.NumOfComments)</span>
-        <i style="cursor: pointer" onclick="" class="bi bi-caret-down-square"></i>
+        <i id="showCommentsButton" style="cursor: pointer" onclick="showComments()" class="bi bi-caret-down-square"></i>
+        <div id="commentsContainer" class="card shadow-0 border-0">
+            <!-- Comments -->
+        </div>
     }
     else
     {
@@ -25,11 +42,34 @@
         </article>
     }
 
-    <script defer>
-        function showComments() {
-
+    <style>
+        button.text-btn {
+            background: none;
+            border: none;
         }
-    </script>
 
-
+    </style>
 }
+
+<script src="~/js/thread/details.js" asp-append-version="true"></script>
+
+<template id="comment">
+    <div class="card">
+        <div class="card-body">
+            <p id="createdAt" class="small text-muted mb-0 ms-2 float-right"><!--User Name--></p>
+            <h6 id="title"><!--Title--></h6>
+            <p id="content" class=""><!--Content--></p>
+            <div class="d-flex justify-content-between">
+                <p id="user" class="small mb-0 ms-2"><!--User Name--></p>
+                <div>
+                    <button class="text-btn small text-muted mb-0">Like</button>
+                    <span id="likeCount" class="small text-muted mb-0"><!--Like Count--></span>
+                    <button class="text-btn small text-muted mb-0">Dislike</button>
+                    <span id="dislikeCount" class="small text-muted mb-0"><!--Dislike Count--></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<div id="injector" data-comments-request-url="@Url.Action("Comments")/@Model.Thread.Id"></div>

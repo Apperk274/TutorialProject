@@ -14,6 +14,13 @@ namespace DataAccessLayer.Repositories
         public ThreadDal(Context c) : base(c)
         {
         }
+        public new Thread Get(int id)
+        {
+            return _c.Set<Thread>()
+                .Include(t => t.AppUser)
+                .Include(t => t.Category)
+                .FirstOrDefault(t => t.Id.Equals(id));
+        }
         public List<Thread> GetList()
         {
             return _c.Set<Thread>()
@@ -29,7 +36,11 @@ namespace DataAccessLayer.Repositories
         }
         public List<Thread> GetCommentsOfThread(int threadId)
         {
-            return GetAllBy(t => t.ParentId.Equals(threadId));
+            return _c.Set<Thread>()
+                .Where(t => t.ParentId.Equals(threadId))
+                .Include(t => t.AppUser)
+                .OrderByDescending(t => t.CreatedAt)
+                .ToList();
         }
     }
 }

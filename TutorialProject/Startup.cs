@@ -25,14 +25,18 @@ namespace TutorialProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
             // Identity manager
             services.AddIdentity<AppUser, IdentityRole>(_ =>
             {
-                _.Password.RequiredLength = 6; //En az kaç karakterli olması gerektiğini belirtiyoruz.
-                _.Password.RequireNonAlphanumeric = false;//Alfanumerik zorunluluğunu kaldırıyoruz.
-                _.Password.RequireLowercase = false;//Küçük harf zorunluluğunu kaldırıyoruz.
-                _.Password.RequireUppercase = false;//Büyük harf zorunluluğunu kaldırıyoruz.
-                _.Password.RequireDigit = false;//0-9 arası sayısal karakter zorunluluğunu kaldırıyoruz.
+                _.Password.RequiredLength = 6; //En az kaÃ§ karakterli olmasÃ½ gerektiÃ°ini belirtiyoruz.
+                _.Password.RequireNonAlphanumeric = false;//Alfanumerik zorunluluÃ°unu kaldÃ½rÃ½yoruz.
+                _.Password.RequireLowercase = false;//KÃ¼Ã§Ã¼k harf zorunluluÃ°unu kaldÃ½rÃ½yoruz.
+                _.Password.RequireUppercase = false;//BÃ¼yÃ¼k harf zorunluluÃ°unu kaldÃ½rÃ½yoruz.
+                _.Password.RequireDigit = false;//0-9 arasÃ½ sayÃ½sal karakter zorunluluÃ°unu kaldÃ½rÃ½yoruz.
             })
             .AddEntityFrameworkStores<Context>()
             .AddDefaultTokenProviders();
