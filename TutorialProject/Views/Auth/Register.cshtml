@@ -28,7 +28,7 @@
 
     <div class="mb-3 ">
         <label for="password" class="form-label">Password</label>
-        @Html.TextBoxFor(x=> x.Password, new {@class = "form-control"})
+        @Html.TextBoxFor(x=> x.Password, new {@class = "form-control", type = "password"})
         @Html.ValidationMessageFor(x=> x.Password, "", new {@class = "text-danger"})
     </div>
 
