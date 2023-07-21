@@ -1,9 +1,11 @@
 ﻿using BusinessLayer;
 using DataAccessLayer.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
+using System.Security.Claims;
 using TutorialProject.Models;
 using VoteApi;
 
@@ -42,6 +44,29 @@ namespace TutorialProject.Controllers
                 DownVotes = DownVotes,
             };
             return View(threadVM);
+        }
+        [HttpPost]
+        [Authorize]
+        public IActionResult OnVote(int id, bool isUp)
+        {
+            if (_threadService.GetThreadDetails(id) == null) throw new ArgumentNullException("Error");
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var vote = _voteService.GetByThreadIdAndUserId(id, userId);
+            if (vote == null)
+            {
+                vote = new()
+                {
+                    IsUp = isUp,
+                    ThreadId = id,
+                    UserId = userId
+                };
+                _voteService.Create(vote);
+            }
+            else if (isUp == vote.IsUp) _voteService.RemoveByThreadIdAndUserId(id, userId);
+            else _voteService.UpdateByThreadIdAndUserId(id, userId, isUp);
+            
+
+            return null;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
