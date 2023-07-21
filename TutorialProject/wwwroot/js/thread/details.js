@@ -39,7 +39,7 @@ function createCommentEl() {
     const commentEl = templateComment.content.cloneNode(true)
     commentEl.querySelector("#title").innerText = comment.title
     commentEl.querySelector("#content").innerText = comment.content
-    commentEl.querySelector("#user").innerText = comment.appUserId
+    commentEl.querySelector("#user").innerText = comment.appUser.name
     commentEl.querySelector("#likeCount").innerText = comment.appUserId
     commentEl.querySelector("#dislikeCount").innerText = comment.appUserId
     return commentEl

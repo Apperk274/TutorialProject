@@ -29,7 +29,11 @@ namespace DataAccessLayer.Repositories
         }
         public List<Thread> GetCommentsOfThread(int threadId)
         {
-            return GetAllBy(t => t.ParentId.Equals(threadId));
+            return _c.Set<Thread>()
+                .Where(t => t.ParentId.Equals(threadId))
+                .Include(t => t.AppUser)
+                .OrderByDescending(t => t.CreatedAt)
+                .ToList();
         }
     }
 }
