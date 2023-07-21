@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using BusinessLayer.ValidationRules;
 using DTOLayer.ReqDTO;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Identity;
@@ -35,7 +36,7 @@ namespace TutorialProject.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _signInManager.PasswordSignInAsync(logInReqDTO.Email, logInReqDTO.Password, false, true);
-                if(result.Succeeded)
+                if (result.Succeeded)
                 {
                     return RedirectToAction("Index", "Thread");
                 }
@@ -48,7 +49,9 @@ namespace TutorialProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterReqDTO registerReqDTO)
         {
-            if (ModelState.IsValid)
+            var validator = new RegisterValidator();
+            var results = validator.Validate(registerReqDTO);
+            if (results.IsValid)
             {
                 AppUser user = new()
                 {
@@ -64,8 +67,15 @@ namespace TutorialProject.Controllers
                 {
                     return RedirectToAction("LogIn", "Auth");
                 }
-
             }
+            else
+            {
+                foreach (var item in results.Errors)
+                {
+                    ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
+                }
+            }
+
             return View();
         }
     }
