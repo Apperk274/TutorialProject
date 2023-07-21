@@ -43,7 +43,7 @@ namespace TutorialProject.Controllers
                 var result = await _signInManager.PasswordSignInAsync(logInReqDTO.Email, logInReqDTO.Password, false, true);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Thread");
+                    return RedirectToAction("List", "Thread");
                 }
             }
             else
@@ -82,7 +82,12 @@ namespace TutorialProject.Controllers
 
             return View();
         }
-
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("List", "Thread");
+        }
         private void AddErrorsToModelState(ModelStateDictionary modelState, List<ValidationFailure> errors)
         {
             foreach (var item in errors)
