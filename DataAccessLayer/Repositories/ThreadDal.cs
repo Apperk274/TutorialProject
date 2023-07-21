@@ -14,6 +14,13 @@ namespace DataAccessLayer.Repositories
         public ThreadDal(Context c) : base(c)
         {
         }
+        public new Thread Get(int id)
+        {
+            return _c.Set<Thread>()
+                .Include(t => t.AppUser)
+                .Include(t => t.Category)
+                .FirstOrDefault(t => t.Id.Equals(id));
+        }
         public List<Thread> GetList()
         {
             return _c.Set<Thread>()

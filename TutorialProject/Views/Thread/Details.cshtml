@@ -7,9 +7,17 @@
     {
         ViewData["Title"] = Model.Thread.Title;
         <article>
+            <h4>@Model.Thread.Category.Name</h4>
             <h2>@Model.Thread.Title</h2>
             <p class="lead" style="white-space: pre-line">@Model.Thread.Content</p>
-            <div class="h5 text-muted"> @Model.Thread.CreatedAt.ToString("F")</div>
+            <div class="h5 text-muted d-flex justify-content-between">
+                <span>
+                    @Model.Thread.CreatedAt.ToString("F")
+                </span>
+                <span>
+                    @Model.Thread.AppUser.Name @Model.Thread.AppUser.Surname
+                </span>
+            </div>
         </article>
         <span>Yorumlar (@Model.NumOfComments)</span>
         <i id="showCommentsButton" style="cursor: pointer" onclick="showComments()" class="bi bi-caret-down-square"></i>
