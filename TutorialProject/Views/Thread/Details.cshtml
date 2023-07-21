@@ -13,9 +13,9 @@
         </article>
         <span>Yorumlar (@Model.NumOfComments)</span>
         <i id="showCommentsButton" style="cursor: pointer" onclick="showComments()" class="bi bi-caret-down-square"></i>
-        <ul id="commentsContainer">
+        <div id="commentsContainer" class="card shadow-0 border">
             <!-- Comments -->
-        </ul>
+        </div>
     }
     else
     {
@@ -25,74 +25,34 @@
             </div>
         </article>
     }
+
+    <style>
+        button.text-btn {
+            background: none;
+            border: none;
+        }
+
+    </style>
 }
 
-<script defer type="text/javascript">
-    let elShowCommentsButton
-    let elCommentsContainer
-    let templateComment
-
-    function showComments() {
-        hideEl(elShowCommentsButton)
-        $.ajax({
-            type: "GET",
-            url: "@Url.Action("Comments")/@Model.Thread.Id",
-            dataType: "json",
-            success: function (comments) {
-                for (comment of comments) {
-                    const commentEl = templateComment.content.cloneNode(true)
-                    commentEl.querySelector("li").innerText = comment.title
-                    elCommentsContainer.appendChild(commentEl)
-                }
-                switchCaretIcon()
-                elShowCommentsButton.setAttribute("onclick", "hideComments()")
-            },
-            error: function (req, status, error) {
-                console.log(msg);
-            },
-            complete: function () {
-                showEl(elShowCommentsButton)
-            }
-        });
-    }
-
-    function hideComments() {
-        elCommentsContainer.innerHTML = ""
-        elShowCommentsButton.setAttribute("onclick", "showComments()")
-        switchCaretIcon()
-    }
-
-    // Util Functions
-
-    function switchCaretIcon() {
-        const classUp = "bi-caret-up-square"
-        const classDown = "bi-caret-down-square"
-        if (elShowCommentsButton.classList.contains(classDown)) {
-            elShowCommentsButton.classList.remove(classDown)
-            elShowCommentsButton.classList.add(classUp)
-        }
-        else {
-            elShowCommentsButton.classList.remove(classUp)
-            elShowCommentsButton.classList.add(classDown)
-        }
-    }
-
-    function showEl(el) {
-        el.classList.remove("d-none")
-    }
-    function hideEl(el) {
-        el.classList.add("d-none")
-    }
-
-    // Referencing elements
-
-    window.onload = function () {
-        elShowCommentsButton = document.querySelector("#showCommentsButton")
-        templateComment = document.querySelector("template#comment")
-        elCommentsContainer = document.querySelector("#commentsContainer")
-    }
-</script>
+<script src="~/js/thread/details.js" asp-append-version="true"></script>
 
 <template id="comment">
-    <li></li>
+    <div class="card">
+        <div class="card-body">
+            <h6 id="title"><!--Title--></h6>
+            <p id="content" class=""><!--Content--></p>
+            <div class="d-flex justify-content-between">
+                <p id="user" class="small mb-0 ms-2"><!--User Name--></p>
+                <div>
+                    <button class="text-btn small text-muted mb-0">Like</button>
+                    <span id="likeCount" class="small text-muted mb-0"><!--Like Count--></span>
+                    <button class="text-btn small text-muted mb-0">Dislike</button>
+                    <span id="dislikeCount" class="small text-muted mb-0"><!--Dislike Count--></span>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
+
+<div id="injector" data-comments-request-url="@Url.Action("Comments")/@Model.Thread.Id"></div>
