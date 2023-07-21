@@ -6,23 +6,19 @@
 }
 
 <h2>Log In</h2>
-<form asp-action="LogIn" method="post">
+@using (Html.BeginForm("LogIn", "Auth", FormMethod.Post))
+{
     <div class="mb-3">
         <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" name="Email" asp-for="Email" required>
-        <div class="invalid-feedback">
-            Please provide a valid email address.
-        </div>
+        @Html.TextBoxFor(x=> x.Email, new {@class = "form-control"})
+        @Html.ValidationMessageFor(x=> x.Email, "", new {@class = "text-danger"})
     </div>
 
-    <div class="mb-3">
+    <div class="mb-3 ">
         <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="password" name="Password" asp-for="Password" required>
-        <div class="invalid-feedback">
-            Please provide a valid password (at least 8 characters).
-        </div>
+        @Html.TextBoxFor(x=> x.Password, new {@class = "form-control"})
+        @Html.ValidationMessageFor(x=> x.Password, "", new {@class = "text-danger"})
     </div>
-
     <button type="submit" class="btn btn-primary">Log in</button>
-</form>
 
+}

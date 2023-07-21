@@ -2,9 +2,12 @@
 using BusinessLayer.ValidationRules;
 using DTOLayer.ReqDTO;
 using EntityLayer.Concrete;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace TutorialProject.Controllers
@@ -33,16 +36,20 @@ namespace TutorialProject.Controllers
         [HttpPost]
         public async Task<IActionResult> LogIn(LogInReqDTO logInReqDTO)
         {
-            if (ModelState.IsValid)
+            var validator = new LogInValidator();
+            var results = validator.Validate(logInReqDTO);
+            if (results.IsValid)
             {
                 var result = await _signInManager.PasswordSignInAsync(logInReqDTO.Email, logInReqDTO.Password, false, true);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index", "Thread");
                 }
-
             }
-
+            else
+            {
+                AddErrorsToModelState(ModelState, results.Errors);
+            }
             return View();
         }
 
@@ -70,13 +77,18 @@ namespace TutorialProject.Controllers
             }
             else
             {
-                foreach (var item in results.Errors)
-                {
-                    ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
-                }
+                AddErrorsToModelState(ModelState, results.Errors);
             }
 
             return View();
+        }
+
+        private void AddErrorsToModelState(ModelStateDictionary modelState, List<ValidationFailure> errors)
+        {
+            foreach (var item in errors)
+            {
+                modelState.AddModelError(item.PropertyName, item.ErrorMessage);
+            }
         }
     }
 }
