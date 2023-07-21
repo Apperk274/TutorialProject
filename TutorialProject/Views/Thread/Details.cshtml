@@ -1,6 +1,5 @@
-﻿@using EntityLayer.Concrete;
-@using DTOLayer.ResDTO;
-@model ThreadResDto;
+@using EntityLayer.Concrete;
+@model ThreadViewModel;
 
 @{
     if (Model != null)
@@ -27,6 +26,7 @@
                 <button type="button" class="btn btn-primary btn-sm">Gönder</button>
             </div>
         </div>
+        <div>@Model.UpVotes - @Model.DownVotes</div>
         <span>Yorumlar (@Model.NumOfComments)</span>
         <i id="showCommentsButton" style="cursor: pointer" onclick="showComments()" class="bi bi-caret-down-square"></i>
         <div id="commentsContainer" class="card shadow-0 border-0">

@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using VoteApi;
 
 namespace TutorialProject
 {
@@ -27,15 +29,26 @@ namespace TutorialProject
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
-
-            services.AddIdentity<AppUser, IdentityRole>()
+            // Identity manager
+            services.AddIdentity<AppUser, IdentityRole>(_ =>
+            {
+                _.Password.RequiredLength = 6; //En az kaç karakterli olmasý gerektiðini belirtiyoruz.
+                _.Password.RequireNonAlphanumeric = false;//Alfanumerik zorunluluðunu kaldýrýyoruz.
+                _.Password.RequireLowercase = false;//Küçük harf zorunluluðunu kaldýrýyoruz.
+                _.Password.RequireUppercase = false;//Büyük harf zorunluluðunu kaldýrýyoruz.
+                _.Password.RequireDigit = false;//0-9 arasý sayýsal karakter zorunluluðunu kaldýrýyoruz.
+            })
             .AddEntityFrameworkStores<Context>()
             .AddDefaultTokenProviders();
 
+            // Mongo db config
+            services.Configure<VoteDbSettings>(Configuration.GetSection(nameof(VoteDbSettings)));
+            services.AddSingleton(sp => sp.GetRequiredService<IOptions<VoteDbSettings>>().Value);
+
             services.AddControllersWithViews();
             services.AddTransient<Context>();
-            services.AddTransient<AuthService>();
             services.AddTransient<ThreadService>();
+            services.AddTransient<VoteService>(); // maybe singleton idk
             services.AddScoped<ThreadDal>();
             services.AddScoped<UserDal>();
             services.AddScoped<CategoryDal>();
