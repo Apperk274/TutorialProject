@@ -1,6 +1,6 @@
 ﻿@using EntityLayer.Concrete;
 @using DTOLayer.ResDTO;
-@model ThreadResDto;
+@model ThreadViewModel;
 
 @{
     bool deneme = false;
@@ -12,6 +12,7 @@
             <p class="lead" style="white-space: pre-line">@Model.Thread.Content</p>
             <div class="h5 text-muted"> @Model.Thread.CreatedAt.ToString("F")</div>
         </article>
+        <div>@Model.UpVotes - @Model.DownVotes</div>
         <span>Yorumlar (@Model.NumOfComments)</span>
         <i style="cursor: pointer" onclick="" class="bi bi-caret-down-square"></i>
     }
