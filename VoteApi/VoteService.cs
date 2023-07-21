@@ -17,7 +17,7 @@ namespace VoteApi
         }
 
 
-        public (long upvotes, long downvotes) GetUpvotesAndDownvotesForThread(string threadId)
+        public (int UpVotes, int DownVotes) GetUpvotesAndDownvotesForThread(int threadId)
         {
             var pipeline = new BsonDocument[]
             {
@@ -43,21 +43,21 @@ namespace VoteApi
                         }))
                     }
                 })
-              };
+            };
 
             var result = _votes.Aggregate<BsonDocument>(pipeline).FirstOrDefault();
 
             if (result != null && result.Contains("upvotes") && result.Contains("downvotes"))
             {
-                var upvotes = result["upvotes"].AsInt64;
-                var downvotes = result["downvotes"].AsInt64;
+                var upvotes = result["upvotes"].AsInt32;
+                var downvotes = result["downvotes"].AsInt32;
                 return (upvotes, downvotes);
             }
 
             return (0, 0);
         }
 
-        public Vote GetByUserIdAndThreadId(string threadId, string userId) =>
+        public Vote GetByUserIdAndThreadId(int threadId, string userId) =>
             _votes.Find<Vote>(Vote => Vote.ThreadId == threadId && Vote.UserId == userId).FirstOrDefault();
 
         public Vote Create(Vote Vote)
@@ -65,10 +65,10 @@ namespace VoteApi
             _votes.InsertOne(Vote);
             return Vote;
         }
-        public void UpdateUserIdAndThreadId(string threadId, string userId, Vote VoteIn) =>
+        public void UpdateUserIdAndThreadId(int threadId, string userId, Vote VoteIn) =>
             _votes.ReplaceOne(Vote => Vote.ThreadId == threadId && Vote.UserId == userId, VoteIn);
 
-        public void RemoveUserIdAndThreadId(string threadId, string userId) =>
+        public void RemoveUserIdAndThreadId(int threadId, string userId) =>
             _votes.DeleteOne(Vote => Vote.ThreadId == threadId && Vote.UserId == userId);
     }
 }
