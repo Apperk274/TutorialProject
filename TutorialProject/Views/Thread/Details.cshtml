@@ -6,14 +6,13 @@
     if (Model != null)
     {
         ViewData["Title"] = Model.Thread.Title;
-        bool deneme = false;
         <article>
             <h2>@Model.Thread.Title</h2>
             <p class="lead" style="white-space: pre-line">@Model.Thread.Content</p>
             <div class="h5 text-muted"> @Model.Thread.CreatedAt.ToString("F")</div>
         </article>
         <span>Yorumlar (@Model.NumOfComments)</span>
-        <i style="cursor: pointer" onclick="showComments()" class="bi bi-caret-down-square"></i>
+        <i id="showCommentsButton" style="cursor: pointer" onclick="showComments()" class="bi bi-caret-down-square"></i>
         <ul id="commentsContainer">
             <!-- Comments -->
         </ul>
@@ -29,26 +28,68 @@
 }
 
 <script defer type="text/javascript">
+    let elShowCommentsButton
+    let elCommentsContainer
+    let templateComment
+
     function showComments() {
-        const commentTemplate = document.querySelector("template#comment")
-        const commentsContainerEl = document.querySelector("#commentsContainer")
+        hideEl(elShowCommentsButton)
         $.ajax({
             type: "GET",
             url: "@Url.Action("Comments")/@Model.Thread.Id",
             dataType: "json",
             success: function (comments) {
                 for (comment of comments) {
-                    console.log(comment.title)
-                    const commentEl = commentTemplate.content.cloneNode(true)
+                    const commentEl = templateComment.content.cloneNode(true)
                     commentEl.querySelector("li").innerText = comment.title
-                    console.log(commentEl)
-                    commentsContainerEl.appendChild(commentEl)
+                    elCommentsContainer.appendChild(commentEl)
                 }
+                switchCaretIcon()
+                elShowCommentsButton.setAttribute("onclick", "hideComments()")
             },
             error: function (req, status, error) {
                 console.log(msg);
+            },
+            complete: function () {
+                showEl(elShowCommentsButton)
             }
         });
+    }
+
+    function hideComments() {
+        elCommentsContainer.innerHTML = ""
+        elShowCommentsButton.setAttribute("onclick", "showComments()")
+        switchCaretIcon()
+    }
+
+    // Util Functions
+
+    function switchCaretIcon() {
+        const classUp = "bi-caret-up-square"
+        const classDown = "bi-caret-down-square"
+        if (elShowCommentsButton.classList.contains(classDown)) {
+            elShowCommentsButton.classList.remove(classDown)
+            elShowCommentsButton.classList.add(classUp)
+        }
+        else {
+            elShowCommentsButton.classList.remove(classUp)
+            elShowCommentsButton.classList.add(classDown)
+        }
+    }
+
+    function showEl(el) {
+        el.classList.remove("d-none")
+    }
+    function hideEl(el) {
+        el.classList.add("d-none")
+    }
+
+    // Referencing elements
+
+    window.onload = function () {
+        elShowCommentsButton = document.querySelector("#showCommentsButton")
+        templateComment = document.querySelector("template#comment")
+        elCommentsContainer = document.querySelector("#commentsContainer")
     }
 </script>
 
