@@ -1,5 +1,6 @@
 ﻿using BusinessLayer;
 using DataAccessLayer.Repositories;
+using DTOLayer.ReqDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -31,6 +32,14 @@ namespace TutorialProject.Controllers
         {
             var comments = _threadDal.GetCommentsOfThread(id);
             return Json(comments);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public JsonResult Comments(ThreadReqDto dto)
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return Json(_threadService.CreateThread(dto, userId));
         }
 
         public IActionResult List()
@@ -71,7 +80,7 @@ namespace TutorialProject.Controllers
             }
             else if (isUp == vote.IsUp) _voteService.RemoveByThreadIdAndUserId(id, userId);
             else _voteService.UpdateByThreadIdAndUserId(id, userId, isUp);
-            
+
 
             return null;
         }

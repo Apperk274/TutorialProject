@@ -2,6 +2,9 @@
 
 let elShowCommentsButton
 let elCommentsContainer
+let elNewCommentContentInput
+let elNewCommentTitleInput
+let elAddCommentButton
 let templateComment
 
 function showComments() {
@@ -12,7 +15,7 @@ function showComments() {
         dataType: "json",
         success: function (comments) {
             for (comment of comments) {
-                const commentEl = createCommentEl()
+                const commentEl = createCommentEl(comment)
                 elCommentsContainer.appendChild(commentEl)
             }
             switchCaretIcon()
@@ -33,9 +36,35 @@ function hideComments() {
     switchCaretIcon()
 }
 
+function addComment() {
+    elAddCommentButton.disabled = true
+    const title = elNewCommentTitleInput.value
+    const content = elNewCommentContentInput.value
+    $.ajax({
+        type: "POST",
+        url: inject("comments-request-url"),
+        dataType: "json",
+        data: {
+            title: title,
+            content: content,
+            parentId: inject("thread-id")
+        },
+        success: function (newComment) {
+            const newCommentEl = createCommentEl(newComment)
+            elCommentsContainer.insertBefore(newCommentEl, elCommentsContainer.firstChild)
+        },
+        error: function (req, status, error) {
+            console.log(msg)
+        },
+        complete: function () {
+            elAddCommentButton.disabled = false
+        }
+    });
+}
+
 // Util functions
 
-function createCommentEl() {
+function createCommentEl(comment) {
     const commentEl = templateComment.content.cloneNode(true)
     commentEl.querySelector("#title").innerText = comment.title
     commentEl.querySelector("#content").innerText = comment.content
@@ -77,5 +106,8 @@ window.onload = function () {
     elShowCommentsButton = document.querySelector("#showCommentsButton")
     templateComment = document.querySelector("template#comment")
     elCommentsContainer = document.querySelector("#commentsContainer")
+    elNewCommentTitleInput = document.querySelector("#newCommentTitleInput")
+    elNewCommentContentInput = document.querySelector("#newCommentContentInput")
+    elAddCommentButton = document.querySelector("#addCommentButton")
     elInjector = document.querySelector("#injector")
 }
