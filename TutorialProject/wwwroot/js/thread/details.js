@@ -17,8 +17,6 @@ function showComments() {
             for (comment of comments) {
                 const commentEl = createCommentEl(comment)
                 elCommentsContainer.appendChild(commentEl)
-                console.log(commentEl, commentEl.children[0])
-                commentEl.setAttribute("data-id", comment.thread.id)
             }
             switchCaretIcon()
             elShowCommentsButton.setAttribute("onclick", "hideComments()")
@@ -64,10 +62,60 @@ function addComment() {
     });
 }
 
+function voteThread(isLiked, id) {
+    $.ajax({
+        type: "POST",
+        url: inject("vote-thread-req-url"),
+        dataType: "json",
+        data: {
+            id: id,
+            isUp: isLiked,
+        },
+        success: function () {
+            const boldClass = "font-weight-bold"
+            const commentEl = document.querySelector(`#comment[data-id="${id}"]`)
+            const likeButtonEl = commentEl.querySelector("#likeButton")
+            const dislikeButtonEl = commentEl.querySelector("#dislikeButton")
+            const likeCountEl = commentEl.querySelector("#likeCount")
+            const dislikeCountEl = commentEl.querySelector("#dislikeCount")
+            if (isLiked == true) {
+                if (likeButtonEl.classList.contains(boldClass)) {
+                    likeCountEl.innerText = +likeCountEl.innerText - 1
+                } else {
+                    likeCountEl.innerText = +likeCountEl.innerText + 1
+                }
+                if (dislikeButtonEl.classList.contains(boldClass)) {
+                    dislikeCountEl.innerText = +dislikeCountEl.innerText - 1
+                    dislikeButtonEl.classList.remove(boldClass)
+                }
+                likeButtonEl.classList.toggle(boldClass)
+            }
+            else {
+                if (dislikeButtonEl.classList.contains(boldClass)) {
+                    dislikeCountEl.innerText = +dislikeCountEl.innerText - 1
+                } else {
+                    dislikeCountEl.innerText = +dislikeCountEl.innerText + 1
+                }
+                if (likeButtonEl.classList.contains(boldClass)) {
+                    likeCountEl.innerText = +likeCountEl.innerText - 1
+                    likeButtonEl.classList.remove(boldClass)
+                }
+                dislikeButtonEl.classList.toggle(boldClass)
+            }
+        },
+        error: function (req, status, error) {
+            console.log(error)
+        },
+        complete: function () {
+        }
+    });
+}
+
 // Util functions
 
 function createCommentEl(comment) {
     const commentEl = templateComment.content.cloneNode(true)
+    commentEl.firstElementChild.setAttribute("data-id", comment.thread.id)
     const activeButtonId = comment.isLiked ? "#likeButton" : comment.isLiked == false ? "#dislikeButton" : null
     if (activeButtonId) commentEl.querySelector(activeButtonId).classList.add("font-weight-bold")
     const likeButtonEl = commentEl.querySelector("#likeButton")
@@ -85,36 +133,6 @@ function createCommentEl(comment) {
     commentEl.querySelector("#dislikeCount").innerText = comment.downVotes
     commentEl.querySelector("#createdAt").innerText = new Date(comment.thread.createdAt).toLocaleString()
     return commentEl
-}
-
-function voteThread(isLiked, id) {
-    $.ajax({
-        type: "POST",
-        url: inject("vote-thread-req-url"),
-        dataType: "json",
-        data: {
-            id: id,
-            isUp: isLiked,
-        },
-        success: function () {
-            const commentEl = document.querySelector(`#comment[data-id=${id}]`)
-            const likeButtonEl = commentEl.querySelector("#likeButton")
-            const dislikeButtonEl = commentEl.querySelector("#dislikeButton")
-            if (isLiked == true) {
-                likeButtonEl.classList.toggle("font-weight-bold")
-                dislikeButtonEl.classList.remove("font-weight-bold")
-            }
-            else {
-                dislikeButtonEl.classList.toggle("font-weight-bold")
-                likeButtonEl.classList.remove("font-weight-bold")
-            }
-        },
-        error: function (req, status, error) {
-            console.log(error)
-        },
-        complete: function () {
-        }
-    });
 }
 
 function switchCaretIcon() {
