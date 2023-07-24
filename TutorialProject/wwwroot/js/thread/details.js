@@ -72,7 +72,7 @@ function createCommentEl(comment) {
     commentEl.querySelector("#user").innerText = thread.appUser.name
     commentEl.querySelector("#likeCount").innerText = comment.upVotes
     commentEl.querySelector("#dislikeCount").innerText = comment.downVotes
-    commentEl.querySelector("#createdAt").innerText = new Date(comment.createdAt).toLocaleString()
+    commentEl.querySelector("#createdAt").innerText = new Date(thread.createdAt).toLocaleString()
     return commentEl
 }
 
