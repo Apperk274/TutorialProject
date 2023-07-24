@@ -67,6 +67,8 @@ function addComment() {
 function createCommentEl(comment) {
     const commentEl = templateComment.content.cloneNode(true)
     const thread = comment.thread
+    const activeButtonId = comment.isLiked ? "#likeButton" : comment.isLiked == false ? "#dislikeButton" : null
+    if (activeButtonId) commentEl.querySelector(activeButtonId).classList.add("font-weight-bold")
     commentEl.querySelector("#title").innerText = thread.title
     commentEl.querySelector("#content").innerText = thread.content
     commentEl.querySelector("#user").innerText = thread.appUser.name

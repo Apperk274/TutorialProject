@@ -2,7 +2,9 @@
 using DataAccessLayer.Repositories;
 using DTOLayer.ReqDTO;
 using DTOLayer.ResDTO;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -20,18 +22,23 @@ namespace TutorialProject.Controllers
         private readonly ThreadDal _threadDal;
         private readonly ThreadService _threadService;
         private readonly VoteService _voteService;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public ThreadController(ILogger<ThreadController> logger, ThreadDal threadDal, ThreadService threadService, VoteService voteService)
+        public ThreadController(ILogger<ThreadController> logger, ThreadDal threadDal, ThreadService threadService, VoteService voteService, SignInManager<AppUser> signInManager)
         {
             _logger = logger;
             _threadDal = threadDal;
             _threadService = threadService;
             _voteService = voteService;
+            _signInManager = signInManager;
         }
 
         [HttpGet]
         public JsonResult Comments(int id)
         {
+            string userId = null;
+            if (_signInManager.IsSignedIn(User)) userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var comments = _threadDal.GetCommentsOfThread(id);
             var commentsVoteDict = _voteService.GetUpvotesAndDownvotesForThreads(comments.Select(e => e.Id).ToList());
             var res = new ThreadResDto[comments.Count];
@@ -40,12 +47,17 @@ namespace TutorialProject.Controllers
                 var comment = comments[i];
                 var votes = (upVotes: 0, downVotes: 0);
                 commentsVoteDict.TryGetValue(comment.Id, out votes);
+                Vote myVote = null;
+                if (userId != null)
+                    myVote = _voteService.GetByThreadIdAndUserId(comment.Id, userId);
+                bool? isLiked = myVote?.IsUp;
                 var commentResDto = new ThreadResDto
                 {
                     Thread = comment,
                     NumOfComments = 0,
                     DownVotes = votes.downVotes,
                     UpVotes = votes.upVotes,
+                    IsLiked = isLiked,
                 };
                 res[i] = commentResDto;
             }
