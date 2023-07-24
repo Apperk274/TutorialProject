@@ -22,7 +22,7 @@ function showComments() {
             elShowCommentsButton.setAttribute("onclick", "hideComments()")
         },
         error: function (req, status, error) {
-            console.log(msg);
+            console.log(error);
         },
         complete: function () {
             showEl(elShowCommentsButton)
@@ -66,11 +66,12 @@ function addComment() {
 
 function createCommentEl(comment) {
     const commentEl = templateComment.content.cloneNode(true)
-    commentEl.querySelector("#title").innerText = comment.title
-    commentEl.querySelector("#content").innerText = comment.content
-    commentEl.querySelector("#user").innerText = comment.appUser.name
-    commentEl.querySelector("#likeCount").innerText = comment.appUserId
-    commentEl.querySelector("#dislikeCount").innerText = comment.appUserId
+    const thread = comment.thread
+    commentEl.querySelector("#title").innerText = thread.title
+    commentEl.querySelector("#content").innerText = thread.content
+    commentEl.querySelector("#user").innerText = thread.appUser.name
+    commentEl.querySelector("#likeCount").innerText = comment.upVotes
+    commentEl.querySelector("#dislikeCount").innerText = comment.downVotes
     commentEl.querySelector("#createdAt").innerText = new Date(comment.createdAt).toLocaleString()
     return commentEl
 }

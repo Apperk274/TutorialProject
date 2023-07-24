@@ -1,9 +1,5 @@
 ﻿using EntityLayer.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DTOLayer.ResDTO
 {
@@ -11,5 +7,7 @@ namespace DTOLayer.ResDTO
     {
         public Thread Thread { get; set; }
         public int NumOfComments { get; set; }
+        public int UpVotes { get; set; }
+        public int DownVotes { get; set; }
     }
 }

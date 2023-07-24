@@ -1,5 +1,6 @@
+@using DTOLayer.ResDTO;
 @using EntityLayer.Concrete;
-@model ThreadViewModel;
+@model ThreadResDto;
 
 @{
     if (Model != null)
@@ -55,7 +56,7 @@
 <script src="~/js/thread/details.js" asp-append-version="true"></script>
 
 <template id="comment">
-    <div class="card">
+    <div class="card my-2">
         <div class="card-body">
             <p id="createdAt" class="small text-muted mb-0 ms-2 float-right"><!--User Name--></p>
             <h6 id="title"><!--Title--></h6>

@@ -2,11 +2,6 @@
 using DTOLayer.ReqDTO;
 using DTOLayer.ResDTO;
 using EntityLayer.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessLayer
 {
@@ -23,7 +18,7 @@ namespace BusinessLayer
             int numOfComments = _threadDal.GetNumOfCommentsOfThread(threadId);
             return new ThreadResDto() { NumOfComments = numOfComments, Thread = thread };
         }
-        public Thread CreateThread(ThreadReqDto dto, string userId)
+        public ThreadResDto CreateThread(ThreadReqDto dto, string userId)
         {
             Thread thread = new()
             {
@@ -34,7 +29,14 @@ namespace BusinessLayer
                 ParentId = dto.ParentId,
             };
             int id = _threadDal.Insert(thread).Id;
-            return _threadDal.Get(id);
+            thread = _threadDal.Get(id);
+            return new ThreadResDto
+            {
+                Thread = thread,
+                NumOfComments = 0,
+                UpVotes = 0,
+                DownVotes = 0
+            };
         }
     }
 }

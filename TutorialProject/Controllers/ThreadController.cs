@@ -1,11 +1,13 @@
 ﻿using BusinessLayer;
 using DataAccessLayer.Repositories;
 using DTOLayer.ReqDTO;
+using DTOLayer.ResDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Claims;
 using TutorialProject.Models;
 using VoteApi;
@@ -31,7 +33,24 @@ namespace TutorialProject.Controllers
         public JsonResult Comments(int id)
         {
             var comments = _threadDal.GetCommentsOfThread(id);
-            return Json(comments);
+            var commentsVoteDict = _voteService.GetUpvotesAndDownvotesForThreads(comments.Select(e => e.Id).ToList());
+            var res = new ThreadResDto[comments.Count];
+            for (var i = 0; i < comments.Count; i++)
+            {
+                var comment = comments[i];
+                var votes = (upVotes: 0, downVotes: 0);
+                commentsVoteDict.TryGetValue(comment.Id, out votes);
+                var commentResDto = new ThreadResDto
+                {
+                    Thread = comment,
+                    NumOfComments = 0,
+                    DownVotes = votes.downVotes,
+                    UpVotes = votes.upVotes,
+                };
+                res[i] = commentResDto;
+            }
+
+            return Json(res);
         }
 
         [HttpPost]
@@ -52,14 +71,9 @@ namespace TutorialProject.Controllers
         {
             var threadDetails = _threadService.GetThreadDetails(id);
             var (UpVotes, DownVotes) = _voteService.GetUpvotesAndDownvotesForThread(id);
-            var threadVM = new ThreadViewModel()
-            {
-                Thread = threadDetails.Thread,
-                NumOfComments = threadDetails.NumOfComments,
-                UpVotes = UpVotes,
-                DownVotes = DownVotes,
-            };
-            return View(threadVM);
+            threadDetails.DownVotes = DownVotes;
+            threadDetails.UpVotes = UpVotes;
+            return View(threadDetails);
         }
         [HttpPost]
         [Authorize]

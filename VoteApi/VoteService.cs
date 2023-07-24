@@ -34,7 +34,7 @@ namespace VoteApi
             _votes = database.GetCollection<Vote>(settings.VoteCollectionName);
         }
 
-        public Dictionary<string, (int upvotes, int downvotes)> GetUpvotesAndDownvotesForThreads(List<string> threadIds)
+        public Dictionary<int, (int upVotes, int downVotes)> GetUpvotesAndDownvotesForThreads(List<int> threadIds)
         {
 
             var pipeline = new List<BsonDocument>
@@ -47,10 +47,10 @@ namespace VoteApi
 
             var cursor = _votes.Aggregate<BsonDocument>(pipeline).ToList();
 
-            var resultDict = new Dictionary<string, (int upvotes, int downvotes)>();
+            var resultDict = new Dictionary<int, (int upVotes, int downVotes)>();
             foreach (var document in cursor)
             {
-                var threadId = document["_id"].AsString;
+                var threadId = document["_id"].AsInt32;
                 var upvotes = document["upvotes"].AsInt32;
                 var downvotes = document["downvotes"].AsInt32;
                 resultDict[threadId] = (upvotes, downvotes);
