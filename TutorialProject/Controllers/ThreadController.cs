@@ -48,8 +48,7 @@ namespace TutorialProject.Controllers
                 var votes = (upVotes: 0, downVotes: 0);
                 commentsVoteDict.TryGetValue(comment.Id, out votes);
                 Vote myVote = null;
-                if (userId != null)
-                    myVote = _voteService.GetByThreadIdAndUserId(comment.Id, userId);
+                if (userId != null) myVote = _voteService.GetByThreadIdAndUserId(comment.Id, userId);
                 bool? isLiked = myVote?.IsUp;
                 var commentResDto = new ThreadResDto
                 {
@@ -81,10 +80,17 @@ namespace TutorialProject.Controllers
 
         public IActionResult Details(int id)
         {
+
             var threadDetails = _threadService.GetThreadDetails(id);
             var (UpVotes, DownVotes) = _voteService.GetUpvotesAndDownvotesForThread(id);
             threadDetails.DownVotes = DownVotes;
             threadDetails.UpVotes = UpVotes;
+            string userId = null;
+            if (_signInManager.IsSignedIn(User)) userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Vote myVote = null;
+            if (userId != null) myVote = _voteService.GetByThreadIdAndUserId(id, userId);
+            bool? isLiked = myVote?.IsUp;
+            threadDetails.IsLiked = isLiked;
             return View(threadDetails);
         }
         [HttpPost]

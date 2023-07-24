@@ -19,6 +19,12 @@
                 </span>
             </div>
         </article>
+        <div class="my-2">
+            <button id="likeButton" class="text-btn small text-muted mb-0 @(Model.IsLiked == true ? "font-weight-bold" : "")">Like</button>
+            <span id="likeCount" class="small text-muted mb-0">@Model.UpVotes </span>
+            <button id="dislikeButton" class="text-btn small text-muted mb-0">Dislike</button>
+            <span id="dislikeCount" class="small text-muted mb-0 @(Model.IsLiked == false ? "font-weight-bold" : "")">@Model.DownVotes</span>
+        </div>
         <div class="card p-3 mb-3" style="background-color: #f8f9fa;">
             <label class="form-label" for="newCommentInput">Yorum yap:</label>
             <input id="newCommentTitleInput" class="form-control mb-2" placeholder="Başlık">
@@ -28,9 +34,9 @@
                 <button id="addCommentButton" onclick="addComment()" type="button" class="btn btn-primary btn-sm">Gönder</button>
             </div>
         </div>
-        <div>@Model.UpVotes - @Model.DownVotes</div>
         <span>Yorumlar (@Model.NumOfComments)</span>
         <i id="showCommentsButton" style="cursor: pointer" onclick="showComments()" class="bi bi-caret-down-square"></i>
+
         <div id="commentsContainer" class="card shadow-0 border-0">
             <!-- Comments -->
         </div>
