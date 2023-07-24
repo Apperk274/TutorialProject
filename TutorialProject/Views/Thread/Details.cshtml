@@ -20,10 +20,10 @@
             </div>
         </article>
         <div class="my-2">
-            <button id="likeButton" class="text-btn small text-muted mb-0 @(Model.IsLiked == true ? "font-weight-bold" : "")">Like</button>
+            <button id="likeButton" onclick="voteThread(true, @Model.Thread.Id)" class="text-btn small text-muted mb-0 @(Model.IsLiked == true ? "font-weight-bold" : "")">Like</button>
             <span id="likeCount" class="small text-muted mb-0">@Model.UpVotes </span>
-            <button id="dislikeButton" class="text-btn small text-muted mb-0">Dislike</button>
-            <span id="dislikeCount" class="small text-muted mb-0 @(Model.IsLiked == false ? "font-weight-bold" : "")">@Model.DownVotes</span>
+            <button id="dislikeButton" onclick="voteThread(false, @Model.Thread.Id)" class="text-btn small text-muted mb-0 @(Model.IsLiked == false ? "font-weight-bold" : "")">Dislike</button>
+            <span id="dislikeCount" class="small text-muted mb-0">@Model.DownVotes</span>
         </div>
         <div class="card p-3 mb-3" style="background-color: #f8f9fa;">
             <label class="form-label" for="newCommentInput">Yorum yap:</label>
@@ -62,7 +62,7 @@
 <script src="~/js/thread/details.js" asp-append-version="true"></script>
 
 <template id="comment">
-    <div class="card my-2">
+    <div id="comment" class="card my-2">
         <div class="card-body">
             <p id="createdAt" class="small text-muted mb-0 ms-2 float-right"><!--Created at--></p>
             <h6 id="title"><!--Title--></h6>
@@ -81,6 +81,7 @@
 </template>
 
 <div id="injector"
-     data-comments-request-url="@Url.Action("Comments")/@Model.Thread.Id"
+     data-comments-req-url="@Url.Action("Comments")/@Model.Thread.Id"
+     data-vote-thread-req-url="@Url.Action("Vote")"
      data-thread-id="@Model.Thread.Id">
 </div>

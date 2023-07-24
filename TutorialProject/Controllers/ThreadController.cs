@@ -95,7 +95,7 @@ namespace TutorialProject.Controllers
         }
         [HttpPost]
         [Authorize]
-        public IActionResult OnVote(int id, bool isUp)
+        public JsonResult Vote(int id, bool isUp)
         {
             if (_threadService.GetThreadDetails(id) == null) throw new ArgumentNullException("Error");
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -114,7 +114,7 @@ namespace TutorialProject.Controllers
             else _voteService.UpdateByThreadIdAndUserId(id, userId, isUp);
 
 
-            return null;
+            return Json(true);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

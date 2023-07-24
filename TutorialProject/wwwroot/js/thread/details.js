@@ -11,12 +11,14 @@ function showComments() {
     hideEl(elShowCommentsButton)
     $.ajax({
         type: "GET",
-        url: inject("comments-request-url"),
+        url: inject("comments-req-url"),
         dataType: "json",
         success: function (comments) {
             for (comment of comments) {
                 const commentEl = createCommentEl(comment)
                 elCommentsContainer.appendChild(commentEl)
+                console.log(commentEl, commentEl.children[0])
+                commentEl.setAttribute("data-id", comment.thread.id)
             }
             switchCaretIcon()
             elShowCommentsButton.setAttribute("onclick", "hideComments()")
@@ -42,7 +44,7 @@ function addComment() {
     const content = elNewCommentContentInput.value
     $.ajax({
         type: "POST",
-        url: inject("comments-request-url"),
+        url: inject("comments-req-url"),
         dataType: "json",
         data: {
             title: title,
@@ -54,7 +56,7 @@ function addComment() {
             elCommentsContainer.insertBefore(newCommentEl, elCommentsContainer.firstChild)
         },
         error: function (req, status, error) {
-            console.log(msg)
+            console.log(error)
         },
         complete: function () {
             elAddCommentButton.disabled = false
@@ -66,16 +68,53 @@ function addComment() {
 
 function createCommentEl(comment) {
     const commentEl = templateComment.content.cloneNode(true)
-    const thread = comment.thread
     const activeButtonId = comment.isLiked ? "#likeButton" : comment.isLiked == false ? "#dislikeButton" : null
     if (activeButtonId) commentEl.querySelector(activeButtonId).classList.add("font-weight-bold")
-    commentEl.querySelector("#title").innerText = thread.title
-    commentEl.querySelector("#content").innerText = thread.content
-    commentEl.querySelector("#user").innerText = thread.appUser.name
+    const likeButtonEl = commentEl.querySelector("#likeButton")
+    const dislikeButtonEl = commentEl.querySelector("#dislikeButton")
+    likeButtonEl.onclick = function () {
+        voteThread(true, comment.thread.id)
+    }
+    dislikeButtonEl.onclick = function () {
+        voteThread(false, comment.thread.id)
+    }
+    commentEl.querySelector("#title").innerText = comment.thread.title
+    commentEl.querySelector("#content").innerText = comment.thread.content
+    commentEl.querySelector("#user").innerText = comment.thread.appUser.name
     commentEl.querySelector("#likeCount").innerText = comment.upVotes
     commentEl.querySelector("#dislikeCount").innerText = comment.downVotes
-    commentEl.querySelector("#createdAt").innerText = new Date(thread.createdAt).toLocaleString()
+    commentEl.querySelector("#createdAt").innerText = new Date(comment.thread.createdAt).toLocaleString()
     return commentEl
+}
+
+function voteThread(isLiked, id) {
+    $.ajax({
+        type: "POST",
+        url: inject("vote-thread-req-url"),
+        dataType: "json",
+        data: {
+            id: id,
+            isUp: isLiked,
+        },
+        success: function () {
+            const commentEl = document.querySelector(`#comment[data-id=${id}]`)
+            const likeButtonEl = commentEl.querySelector("#likeButton")
+            const dislikeButtonEl = commentEl.querySelector("#dislikeButton")
+            if (isLiked == true) {
+                likeButtonEl.classList.toggle("font-weight-bold")
+                dislikeButtonEl.classList.remove("font-weight-bold")
+            }
+            else {
+                dislikeButtonEl.classList.toggle("font-weight-bold")
+                likeButtonEl.classList.remove("font-weight-bold")
+            }
+        },
+        error: function (req, status, error) {
+            console.log(error)
+        },
+        complete: function () {
+        }
+    });
 }
 
 function switchCaretIcon() {

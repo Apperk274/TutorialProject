@@ -82,6 +82,11 @@ namespace TutorialProject
                     defaults: new { controller = "Thread", action = "Comments" }
                     );
                 endpoints.MapControllerRoute(
+                 name: "Threads List",
+                 pattern: "Vote",
+                 defaults: new { controller = "Thread", action = "Vote" }
+                 );
+                endpoints.MapControllerRoute(
                     name: "Threads List",
                     pattern: "Comments/{id}",
                     defaults: new { controller = "Thread", action = "Comments" }
