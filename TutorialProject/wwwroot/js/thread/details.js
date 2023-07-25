@@ -116,22 +116,24 @@ function voteThread(isLiked, id, main = false) {
 function createCommentEl(comment) {
     const commentEl = templateComment.content.cloneNode(true)
     commentEl.firstElementChild.setAttribute("data-id", comment.thread.id)
-    const activeButtonId = comment.isLiked ? "#likeButton" : comment.isLiked == false ? "#dislikeButton" : null
-    if (activeButtonId) commentEl.querySelector(activeButtonId).classList.add("font-weight-bold")
-    const likeButtonEl = commentEl.querySelector("#likeButton")
-    const dislikeButtonEl = commentEl.querySelector("#dislikeButton")
-    likeButtonEl.onclick = function () {
-        voteThread(true, comment.thread.id)
-    }
-    dislikeButtonEl.onclick = function () {
-        voteThread(false, comment.thread.id)
-    }
     commentEl.querySelector("#title").innerText = comment.thread.title
     commentEl.querySelector("#content").innerText = comment.thread.content
     commentEl.querySelector("#user").innerText = comment.thread.appUser.name
     commentEl.querySelector("#likeCount").innerText = comment.upVotes
     commentEl.querySelector("#dislikeCount").innerText = comment.downVotes
     commentEl.querySelector("#createdAt").innerText = new Date(comment.thread.createdAt).toLocaleString()
+    if (isAuthenticated()) {
+        const activeButtonId = comment.isLiked ? "#likeButton" : comment.isLiked == false ? "#dislikeButton" : null
+        if (activeButtonId) commentEl.querySelector(activeButtonId).classList.add("font-weight-bold")
+        const likeButtonEl = commentEl.querySelector("#likeButton")
+        const dislikeButtonEl = commentEl.querySelector("#dislikeButton")
+        likeButtonEl.onclick = function () {
+            voteThread(true, comment.thread.id)
+        }
+        dislikeButtonEl.onclick = function () {
+            voteThread(false, comment.thread.id)
+        }
+    }
     return commentEl
 }
 
@@ -146,6 +148,10 @@ function switchCaretIcon() {
         elShowCommentsButton.classList.remove(classUp)
         elShowCommentsButton.classList.add(classDown)
     }
+}
+
+function isAuthenticated() {
+    return inject("authenticated") === "True"
 }
 
 // General functions
