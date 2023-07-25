@@ -31,17 +31,20 @@ namespace DataAccessLayer.Repositories
         }
         public T Insert(T t)
         {
-            var entity= _c.Add(t).Entity;
+            var entity = _c.Add(t).Entity;
             _c.SaveChanges();
             return entity;
         }
         public T Update(T t)
         {
-            return _c.Update(t).Entity;
+            var entity = _c.Update(t).Entity;
+            _c.SaveChanges();
+            return entity;
         }
         public void Delete(T t)
         {
             _c.Remove(t);
+            _c.SaveChanges();
         }
     }
 }
