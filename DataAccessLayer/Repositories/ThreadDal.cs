@@ -30,6 +30,16 @@ namespace DataAccessLayer.Repositories
                 .OrderByDescending(t => t.CreatedAt)
                 .ToList();
         }
+        public List<Thread> GetListByUserId(string userId)
+        {
+            return _c.Set<Thread>()
+                .Where(t => t.ParentId == null)
+                .Where(t => t.AppUser.Id == userId)
+                .Include(t => t.AppUser)
+                .Include(t => t.Category)
+                .OrderByDescending(t => t.CreatedAt)
+                .ToList();
+        }
         public int GetNumOfCommentsOfThread(int threadId)
         {
             return _c.Set<Thread>().Where(t => t.ParentId.Equals(threadId)).Count();
