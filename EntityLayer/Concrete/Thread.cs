@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EntityLayer.Concrete
 {
-    public class Thread
+    public class Thread : ISoftDelete
     {
         [Key] public int Id { get; set; }
         public string Title { get; set; }
@@ -16,5 +16,6 @@ namespace EntityLayer.Concrete
         public AppUser AppUser { get; set; }
         public int? ParentId { get; set; }
         public virtual Thread Parent { get; set; }
+        public DateTimeOffset? DeletedAt { get; set; }
     }
 }
