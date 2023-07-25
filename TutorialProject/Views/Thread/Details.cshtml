@@ -6,25 +6,28 @@
     if (Model != null)
     {
         ViewData["Title"] = Model.Thread.Title;
-        <article>
-            <h4>@Model.Thread.Category.Name</h4>
-            <h2>@Model.Thread.Title</h2>
-            <p class="lead" style="white-space: pre-line">@Model.Thread.Content</p>
-            <div class="h5 text-muted d-flex justify-content-between">
-                <span>
-                    @Model.Thread.CreatedAt.ToString("F")
-                </span>
-                <span>
-                    @Model.Thread.AppUser.Name @Model.Thread.AppUser.Surname
-                </span>
+        <div id="mainThread">
+            <article>
+                <h4>@Model.Thread.Category.Name</h4>
+                <h2>@Model.Thread.Title</h2>
+                <p class="lead" style="white-space: pre-line">@Model.Thread.Content</p>
+                <div class="h5 text-muted d-flex justify-content-between">
+                    <span>
+                        @Model.Thread.CreatedAt.ToString("F")
+                    </span>
+                    <span>
+                        @Model.Thread.AppUser.Name @Model.Thread.AppUser.Surname
+                    </span>
+                </div>
+            </article>
+            <div class="my-2">
+                <button id="likeButton" onclick="voteThread(true, @Model.Thread.Id, true)" class="text-btn small text-muted mb-0 @(Model.IsLiked == true ? "font-weight-bold" : "")">Like</button>
+                <span id="likeCount" class="small text-muted mb-0">@Model.UpVotes </span>
+                <button id="dislikeButton" onclick="voteThread(false, @Model.Thread.Id, true)" class="text-btn small text-muted mb-0 @(Model.IsLiked == false ? "font-weight-bold" : "")">Dislike</button>
+                <span id="dislikeCount" class="small text-muted mb-0">@Model.DownVotes</span>
             </div>
-        </article>
-        <div class="my-2">
-            <button id="likeButton" onclick="voteThread(true, @Model.Thread.Id)" class="text-btn small text-muted mb-0 @(Model.IsLiked == true ? "font-weight-bold" : "")">Like</button>
-            <span id="likeCount" class="small text-muted mb-0">@Model.UpVotes </span>
-            <button id="dislikeButton" onclick="voteThread(false, @Model.Thread.Id)" class="text-btn small text-muted mb-0 @(Model.IsLiked == false ? "font-weight-bold" : "")">Dislike</button>
-            <span id="dislikeCount" class="small text-muted mb-0">@Model.DownVotes</span>
         </div>
+
         <div class="card p-3 mb-3" style="background-color: #f8f9fa;">
             <label class="form-label" for="newCommentInput">Yorum yap:</label>
             <input id="newCommentTitleInput" class="form-control mb-2" placeholder="Başlık">

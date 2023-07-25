@@ -62,7 +62,7 @@ function addComment() {
     });
 }
 
-function voteThread(isLiked, id) {
+function voteThread(isLiked, id, main = false) {
     $.ajax({
         type: "POST",
         url: inject("vote-thread-req-url"),
@@ -73,11 +73,11 @@ function voteThread(isLiked, id) {
         },
         success: function () {
             const boldClass = "font-weight-bold"
-            const commentEl = document.querySelector(`#comment[data-id="${id}"]`)
-            const likeButtonEl = commentEl.querySelector("#likeButton")
-            const dislikeButtonEl = commentEl.querySelector("#dislikeButton")
-            const likeCountEl = commentEl.querySelector("#likeCount")
-            const dislikeCountEl = commentEl.querySelector("#dislikeCount")
+            const threadEl = document.querySelector(main ? '#mainThread' : `#comment[data-id="${id}"]`)
+            const likeButtonEl = threadEl.querySelector("#likeButton")
+            const dislikeButtonEl = threadEl.querySelector("#dislikeButton")
+            const likeCountEl = threadEl.querySelector("#likeCount")
+            const dislikeCountEl = threadEl.querySelector("#dislikeCount")
             if (isLiked == true) {
                 if (likeButtonEl.classList.contains(boldClass)) {
                     likeCountEl.innerText = +likeCountEl.innerText - 1
