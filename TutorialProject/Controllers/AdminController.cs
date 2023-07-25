@@ -1,9 +1,11 @@
 ﻿using BusinessLayer;
 using DataAccessLayer.Repositories;
+using DTOLayer.ReqDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using TutorialProject.Models;
 
 namespace TutorialProject.Controllers
 {
@@ -11,12 +13,13 @@ namespace TutorialProject.Controllers
     public class AdminController : Controller
     {
         private readonly ThreadDal _threadDal;
+        private readonly CategoryDal _categoryDal;
         private readonly ThreadService _threadService;
-        public AdminController(ThreadDal threadDal, ThreadService threadService)
+        public AdminController(ThreadDal threadDal, ThreadService threadService, CategoryDal categoryDal)
         {
             _threadDal = threadDal;
             _threadService = threadService;
-
+            _categoryDal = categoryDal;
         }
 
         // GET: AdminController
@@ -56,16 +59,28 @@ namespace TutorialProject.Controllers
         // GET: AdminController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var thread = _threadDal.Get(id);
+            var categories = _categoryDal.GetAll();
+            EditThreadViewModel vm = new()
+            {
+                Thread = thread,
+                AvailableCategories = categories
+            };
+            return View(vm);
         }
 
         // POST: AdminController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, ThreadReqDto dto)
         {
             try
             {
+                var thread = _threadDal.Get(id) ?? throw new BadHttpRequestException("no");
+                thread.Title = dto.Title;
+                thread.Content = dto.Content;
+                thread.CategoryId = dto.CategoryId;
+                _threadDal.Update(thread);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -85,19 +100,6 @@ namespace TutorialProject.Controllers
             return Json("ok");
         }
 
-        // POST: AdminController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+
     }
 }

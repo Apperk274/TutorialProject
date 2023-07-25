@@ -1,0 +1,34 @@
+﻿@model TutorialProject.Models.EditThreadViewModel
+
+@{
+    ViewData["Title"] = "Edit Thread";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit Thread</h2>
+
+<form asp-action="Edit" method="post">
+    <div class="form-group">
+        <label>Title</label>
+        <input type="text" class="form-control" asp-for="Thread.Title" name="Title"/>
+    </div>
+
+    <div class="form-group">
+        <label>Content</label>
+        <textarea class="form-control" asp-for="Thread.Content" name="Content"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Category</label>
+        <select class="form-control" asp-for="Thread.CategoryId" name="CategoryId">
+            <option value="">-- Select Category --</option>
+            @foreach (var category in Model.AvailableCategories)
+            {
+                <option value="@category.Id">@category.Name</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
