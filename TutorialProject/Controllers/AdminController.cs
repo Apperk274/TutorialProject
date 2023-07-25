@@ -21,6 +21,12 @@ namespace TutorialProject.Controllers
             _threadService = threadService;
             _categoryDal = categoryDal;
         }
+        // GET: AdminController/List
+        public JsonResult List()
+        {
+            var threads = _threadDal.GetListByUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            return new JsonResult(threads);
+        }
 
         // GET: AdminController
         public ActionResult Index()
