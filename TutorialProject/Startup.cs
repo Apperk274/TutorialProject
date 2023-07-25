@@ -38,8 +38,14 @@ namespace TutorialProject
                 _.Password.RequireUppercase = false;//Büyük harf zorunluluðunu kaldýrýyoruz.
                 _.Password.RequireDigit = false;//0-9 arasý sayýsal karakter zorunluluðunu kaldýrýyoruz.
             })
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<Context>()
             .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Auth/Login";
+            });
 
             // Mongo db config
             services.Configure<VoteDbSettings>(Configuration.GetSection(nameof(VoteDbSettings)));
@@ -55,7 +61,7 @@ namespace TutorialProject
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -73,6 +79,20 @@ namespace TutorialProject
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            // Ensure the "admin" role exists and create if not
+            if (!roleManager.RoleExistsAsync("Admin").Result)
+            {
+                var adminRole = new IdentityRole("Admin");
+                roleManager.CreateAsync(adminRole).Wait();
+            }
+
+            // Ensure the "normal" role exists and create if not
+            if (!roleManager.RoleExistsAsync("Normal").Result)
+            {
+                var normalRole = new IdentityRole("Normal");
+                roleManager.CreateAsync(normalRole).Wait();
+            }
 
             app.UseEndpoints(endpoints =>
             {

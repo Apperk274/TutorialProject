@@ -80,7 +80,6 @@ namespace TutorialProject.Controllers
 
         public IActionResult Details(int id)
         {
-
             var threadDetails = _threadService.GetThreadDetails(id);
             var (UpVotes, DownVotes) = _voteService.GetUpvotesAndDownvotesForThread(id);
             threadDetails.DownVotes = DownVotes;
