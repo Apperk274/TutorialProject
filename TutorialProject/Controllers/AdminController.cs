@@ -31,8 +31,7 @@ namespace TutorialProject.Controllers
         // GET: AdminController
         public ActionResult Index()
         {
-            var threads = _threadDal.GetListByUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            return View(threads);
+            return View();
         }
 
         // GET: AdminController/Details/5
