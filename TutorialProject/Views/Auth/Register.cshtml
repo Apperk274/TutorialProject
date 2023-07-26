@@ -4,34 +4,34 @@
     ViewData["Title"] = "Register";
     Layout = "~/Views/Shared/_AuthLayout.cshtml";
 }
-
-<h2>Register</h2>
-@using (Html.BeginForm("Register", "Auth", FormMethod.Post))
-{
-    <div class="mb-3">
-        <label for="name" class="form-label">Name</label>
-        @Html.TextBoxFor(x=> x.Name, new {@class = "form-control"})
-        @Html.ValidationMessageFor(x=> x.Name, "", new {@class = "text-danger"})
-    </div>
-
-    <div class="mb-3">
-        <label for="surname" class="form-label">Surname</label>
-        @Html.TextBoxFor(x=> x.Surname, new {@class = "form-control"})
-        @Html.ValidationMessageFor(x=> x.Surname, "", new {@class = "text-danger"})
-    </div>
-
-    <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        @Html.TextBoxFor(x=> x.Email, new {@class = "form-control"})
-        @Html.ValidationMessageFor(x=> x.Email, "", new {@class = "text-danger"})
-    </div>
-
-    <div class="mb-3 ">
-        <label for="password" class="form-label">Password</label>
-        @Html.TextBoxFor(x=> x.Password, new {@class = "form-control", type = "password"})
-        @Html.ValidationMessageFor(x=> x.Password, "", new {@class = "text-danger"})
-    </div>
-
-    <button type="submit" class="btn btn-primary">Register</button>
-}
-
+<div class="content">
+    <form class="register-form" action="@Url.Action("Register")" method="post">
+        <h3 class="font-green">Kayıt Ol</h3>
+        <p class="hint"> Lütfen kişisel bilgilerinizi girin: </p>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">Adınız</label>
+            <input class="form-control placeholder-no-fix" type="text" placeholder="Adınız" name="name" />
+            @Html.ValidationMessageFor(x=> x.Name, "", new {@class = "text-danger"})
+        </div>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">Soyadınız</label>
+            <input class="form-control placeholder-no-fix" type="text" placeholder="Soyadınız" name="surname" />
+            @Html.ValidationMessageFor(x=> x.Surname, "", new {@class = "text-danger"})
+        </div>
+        <p class="hint"> Lütfen hesap bilgilerinizi girin: </p>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">E-Posta</label>
+            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="E-Posta" name="email" />
+            @Html.ValidationMessageFor(x=> x.Email, "", new {@class = "text-danger"})
+        </div>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">Şifre</label>
+            <input class="form-control placeholder-no-fix" type="password" autocomplete="off" id="register_password" placeholder="Şifre" name="password" />
+            @Html.ValidationMessageFor(x=> x.Password, "", new {@class = "text-danger"})
+        </div>
+        <div class="form-actions">
+            <a href="@Url.Action("Login")" class="btn green btn-outline">Back</a>
+            <button type="submit" id="register-submit-btn" class="btn btn-success uppercase pull-right float-right">Submit</button>
+        </div>
+    </form>
+</div>
