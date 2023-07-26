@@ -1,6 +1,7 @@
 ﻿using BusinessLayer;
 using DataAccessLayer.Repositories;
 using DTOLayer.ReqDTO;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -43,16 +44,25 @@ namespace TutorialProject.Controllers
         // GET: AdminController/Create
         public ActionResult Create()
         {
-            return View();
+            return View(_categoryDal.GetAll());
         }
 
         // POST: AdminController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(ThreadReqDto dto)
         {
             try
             {
+                string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Thread thread = new()
+                {
+                    Title = dto.Title,
+                    Content = dto.Content,
+                    CategoryId = dto.CategoryId,
+                    AppUserId = userId
+                };
+                _threadDal.Insert(thread);
                 return RedirectToAction(nameof(Index));
             }
             catch
