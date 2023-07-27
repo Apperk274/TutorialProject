@@ -12,7 +12,7 @@
         </div>
 
         @await Html.PartialAsync("BlogDetails/_AddCommentPartial")
-        <span>Yorumlar (@Model.NumOfComments)</span>
+        <span>Yorumlar (<span id="commentCount">@Model.NumOfComments</span>)</span>
         <i id="showCommentsButton" style="cursor: pointer" onclick="showComments()" class="bi bi-caret-down-square"></i>
 
         <div id="commentsContainer" class="card shadow-0 border-0">

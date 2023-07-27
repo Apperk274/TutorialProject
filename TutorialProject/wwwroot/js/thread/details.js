@@ -7,6 +7,7 @@ let elNewCommentContentInput
 let elNewCommentTitleInput
 let elAddCommentButton
 let templateComment
+let elCommentCount
 
 // Variables
 let isCommentSectionOpen = false
@@ -56,7 +57,9 @@ function addComment() {
         success: function (newComment) {
             const newCommentEl = createCommentEl(newComment)
             if (isCommentSectionOpen) elCommentsContainer.insertBefore(newCommentEl, elCommentsContainer.firstChild)
-            showComments()
+            else showComments()
+            console.log(elCommentCount, elCommentCount.innerHTML)
+            elCommentCount.innerHTML = +elCommentCount.innerHTML + 1
         },
         error: function (req, status, error) {
             console.log(error)
@@ -179,6 +182,7 @@ window.onload = function () {
     elShowCommentsButton = document.querySelector("#showCommentsButton")
     templateComment = document.querySelector("template#comment")
     elCommentsContainer = document.querySelector("#commentsContainer")
+    elCommentCount = document.querySelector("#commentCount")
     elNewCommentTitleInput = document.querySelector("#newCommentTitleInput")
     elNewCommentContentInput = document.querySelector("#newCommentContentInput")
     elAddCommentButton = document.querySelector("#addCommentButton")
