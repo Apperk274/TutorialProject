@@ -1,0 +1,21 @@
+﻿@using EntityLayer.Concrete;
+@model Thread
+
+<div class="col-md-4">
+    <div class="card mb-4 p-4 shadow-sm">
+        <div class="d-flex justify-content-between">
+            <strong class="d-inline mb-2">@Model.Category.Name</strong>
+            <span class="d-inline mb-2">@Model.AppUser.Name[0]. @Model.AppUser.Surname</span>
+        </div>
+        <h3>@Model.Title</h3>
+        <p class="card-text mb-auto text-truncate-multiline">
+            @Model.Content
+        </p>
+        <div class="d-flex justify-content-between mt-2">
+            <a asp-controller="Thread" asp-action="Details" asp-route-id="@Model.Id" class="icon-link gap-1 icon-link-hover stretched-link">
+                Continue reading
+            </a>
+            <span class="mb-1 text-body-secondary">@Model.CreatedAt.ToString("d MMM yyyy")</span>
+        </div>
+    </div>
+</div>
