@@ -1,0 +1,23 @@
+﻿@using DTOLayer.ResDTO;
+@model ThreadResDto
+
+<div class="my-2">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <button id="likeButton" onclick="voteThread(true, @Model.Thread.Id, true)" class="text-btn small text-muted mb-0 @(Model.IsLiked == true ? "font-weight-bold" : "")">Like</button>
+    }
+    else
+    {
+        <span class="small text-muted mb-0">Like</span>
+    }
+    <span id="likeCount" class="small text-muted mb-0">@Model.UpVotes </span>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <button id="dislikeButton" onclick="voteThread(false, @Model.Thread.Id, true)" class="text-btn small text-muted mb-0 @(Model.IsLiked == false ? "font-weight-bold" : "")">Dislike</button>
+    }
+    else
+    {
+        <span class="small text-muted mb-0">Dislike</span>
+    }
+    <span id="dislikeCount" class="small text-muted mb-0">@Model.DownVotes</span>
+</div>

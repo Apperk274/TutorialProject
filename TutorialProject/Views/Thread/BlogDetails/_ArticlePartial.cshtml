@@ -1,0 +1,16 @@
+﻿@using EntityLayer.Concrete;
+@model Thread
+
+<article>
+    <h4>@Model.Category.Name</h4>
+    <h2>@Model.Title</h2>
+    <p class="lead" style="white-space: pre-line">@Model.Content</p>
+    <div class="h5 text-muted d-flex justify-content-between">
+        <span>
+            @Model.CreatedAt.ToString("F")
+        </span>
+        <span>
+            @Model.AppUser.Name @Model.AppUser.Surname
+        </span>
+    </div>
+</article>
