@@ -1,11 +1,15 @@
 ﻿let elInjector
 
+// Elements
 let elShowCommentsButton
 let elCommentsContainer
 let elNewCommentContentInput
 let elNewCommentTitleInput
 let elAddCommentButton
 let templateComment
+
+// Variables
+let isCommentSectionOpen = false
 
 function showComments() {
     hideEl(elShowCommentsButton)
@@ -51,7 +55,8 @@ function addComment() {
         },
         success: function (newComment) {
             const newCommentEl = createCommentEl(newComment)
-            elCommentsContainer.insertBefore(newCommentEl, elCommentsContainer.firstChild)
+            if (isCommentSectionOpen) elCommentsContainer.insertBefore(newCommentEl, elCommentsContainer.firstChild)
+            showComments()
         },
         error: function (req, status, error) {
             console.log(error)
@@ -143,10 +148,12 @@ function switchCaretIcon() {
     if (elShowCommentsButton.classList.contains(classDown)) {
         elShowCommentsButton.classList.remove(classDown)
         elShowCommentsButton.classList.add(classUp)
+        isCommentSectionOpen = true
     }
     else {
         elShowCommentsButton.classList.remove(classUp)
         elShowCommentsButton.classList.add(classDown)
+        isCommentSectionOpen = false
     }
 }
 
