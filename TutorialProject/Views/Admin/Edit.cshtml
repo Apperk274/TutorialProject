@@ -2,15 +2,22 @@
 
 @{
     ViewData["Title"] = "Edit Thread";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit Thread</h2>
+@if (Model.Thread == null)
+{
+    <h2>Create Thread</h2>
 
-<form asp-action="Edit" method="post">
+}
+else
+{
+    <h2>Edit Thread</h2>
+}
+
+<form asp-action="Upsert" method="post">
     <div class="form-group">
         <label>Title</label>
-        <input type="text" class="form-control" asp-for="Thread.Title" name="Title"/>
+        <input type="text" class="form-control" asp-for="Thread.Title" name="Title" />
     </div>
 
     <div class="form-group">

@@ -44,32 +44,15 @@ namespace TutorialProject.Controllers
         // GET: AdminController/Create
         public ActionResult Create()
         {
-            return View(_categoryDal.GetAll());
+            var categories = _categoryDal.GetAll();
+            EditThreadViewModel vm = new()
+            {
+                Thread = null,
+                AvailableCategories = categories
+            };
+            return View("Edit", vm);
         }
 
-        // POST: AdminController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(ThreadReqDto dto)
-        {
-            try
-            {
-                string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                Thread thread = new()
-                {
-                    Title = dto.Title,
-                    Content = dto.Content,
-                    CategoryId = dto.CategoryId,
-                    AppUserId = userId
-                };
-                _threadDal.Insert(thread);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
         // GET: AdminController/Edit/5
         public ActionResult Edit(int id)
@@ -87,15 +70,30 @@ namespace TutorialProject.Controllers
         // POST: AdminController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, ThreadReqDto dto)
+        public ActionResult Upsert(int? id, ThreadReqDto dto)
         {
             try
             {
-                var thread = _threadDal.Get(id) ?? throw new BadHttpRequestException("no");
-                thread.Title = dto.Title;
-                thread.Content = dto.Content;
-                thread.CategoryId = dto.CategoryId;
-                _threadDal.Update(thread);
+                if (id.HasValue)
+                {
+                    var thread = _threadDal.Get(id ?? 0) ?? throw new BadHttpRequestException("no");
+                    thread.Title = dto.Title;
+                    thread.Content = dto.Content;
+                    thread.CategoryId = dto.CategoryId;
+                    _threadDal.Update(thread);
+                }
+                else
+                {
+                    string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    Thread thread = new()
+                    {
+                        Title = dto.Title,
+                        Content = dto.Content,
+                        CategoryId = dto.CategoryId,
+                        AppUserId = userId
+                    };
+                    _threadDal.Insert(thread);
+                }
                 return RedirectToAction(nameof(Index));
             }
             catch
