@@ -5,6 +5,7 @@ using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +26,16 @@ namespace TutorialProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Override default layout path
+            services.Configure<RazorViewEngineOptions>(options =>
+            {
+                // Replace "~/Views/Shared/AppLayout" with the path to your custom layout folder.
+                options.AreaViewLocationFormats.Clear();
+                options.AreaViewLocationFormats.Add("~/Views/Shared/AppLayout/{0}" + RazorViewEngine.ViewExtension);
+                options.ViewLocationFormats.Clear();
+                options.ViewLocationFormats.Add("~/Views/Shared/AppLayout/{0}" + RazorViewEngine.ViewExtension);
+            });
+
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;

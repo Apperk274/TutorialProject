@@ -5,7 +5,7 @@ namespace TutorialProject.Models
 {
     public class EditThreadViewModel
     {
-        public Thread Thread { get; set; }
+        public Thread? Thread { get; set; }
         public List<Category> AvailableCategories { get; set; }
     }
 }

@@ -1,56 +1,17 @@
 @using DTOLayer.ResDTO;
 @using EntityLayer.Concrete;
-@model ThreadResDto;
+@model ThreadResDto
 
 @{
     if (Model != null)
     {
         ViewData["Title"] = Model.Thread.Title;
         <div id="mainThread">
-            <article>
-                <h4>@Model.Thread.Category.Name</h4>
-                <h2>@Model.Thread.Title</h2>
-                <p class="lead" style="white-space: pre-line">@Model.Thread.Content</p>
-                <div class="h5 text-muted d-flex justify-content-between">
-                    <span>
-                        @Model.Thread.CreatedAt.ToString("F")
-                    </span>
-                    <span>
-                        @Model.Thread.AppUser.Name @Model.Thread.AppUser.Surname
-                    </span>
-                </div>
-            </article>
-            <div class="my-2">
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <button id="likeButton" onclick="voteThread(true, @Model.Thread.Id, true)" class="text-btn small text-muted mb-0 @(Model.IsLiked == true ? "font-weight-bold" : "")">Like</button>
-                }
-                else
-                {
-                    <span class="small text-muted mb-0">Like</span>
-                }
-                <span id="likeCount" class="small text-muted mb-0">@Model.UpVotes </span>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <button id="dislikeButton" onclick="voteThread(false, @Model.Thread.Id, true)" class="text-btn small text-muted mb-0 @(Model.IsLiked == false ? "font-weight-bold" : "")">Dislike</button>
-                }
-                else
-                {
-                    <span class="small text-muted mb-0">Dislike</span>
-                }
-                <span id="dislikeCount" class="small text-muted mb-0">@Model.DownVotes</span>
-            </div>
+            @await Html.PartialAsync("BlogDetails/_ArticlePartial", Model.Thread)
+            @await Html.PartialAsync("BlogDetails/_ArticleActionsPartial", Model)
         </div>
 
-        <div class="card p-3 mb-3" style="background-color: #f8f9fa;">
-            <label class="form-label" for="newCommentInput">Yorum yap:</label>
-            <input id="newCommentTitleInput" class="form-control mb-2" placeholder="Başlık">
-            <textarea class="form-control" id="newCommentContentInput" rows="4"
-                      style="background: #fff;"></textarea>
-            <div class="mt-2">
-                <button id="addCommentButton" onclick="addComment()" type="button" class="btn btn-primary btn-sm">Gönder</button>
-            </div>
-        </div>
+        @await Html.PartialAsync("BlogDetails/_AddCommentPartial")
         <span>Yorumlar (@Model.NumOfComments)</span>
         <i id="showCommentsButton" style="cursor: pointer" onclick="showComments()" class="bi bi-caret-down-square"></i>
 
@@ -79,36 +40,7 @@
 <script src="~/js/thread/details.js" asp-append-version="true"></script>
 
 <template id="comment">
-    <div id="comment" class="card my-2">
-        <div class="card-body">
-            <p id="createdAt" class="small text-muted mb-0 ms-2 float-right"><!--Created at--></p>
-            <h6 id="title"><!--Title--></h6>
-            <p id="content" class=""><!--Content--></p>
-            <div class="d-flex justify-content-between">
-                <p id="user" class="small mb-0 ms-2"><!--User Name--></p>
-                <div>
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <button id="likeButton" class="text-btn small text-muted mb-0">Like</button>
-                    }
-                    else
-                    {
-                        <span class="small text-muted mb-0">Like</span>
-                    }
-                    <span id="likeCount" class="small text-muted mb-0"><!--Like Count--></span>
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <button id="dislikeButton" class="text-btn small text-muted mb-0">Dislike</button>
-                    }
-                    else
-                    {
-                        <span class="small text-muted mb-0">Dislike</span>
-                    }
-                    <span id="dislikeCount" class="small text-muted mb-0"><!--Dislike Count--></span>
-                </div>
-            </div>
-        </div>
-    </div>
+    @await Html.PartialAsync("BlogDetails/_CommentPartial")
 </template>
 
 <div id="injector"

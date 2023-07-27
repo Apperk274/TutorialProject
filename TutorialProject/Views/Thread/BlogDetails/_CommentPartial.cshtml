@@ -1,0 +1,30 @@
+﻿<div id="comment" class="card my-2">
+    <div class="card-body">
+        <p id="createdAt" class="small text-muted mb-0 ms-2 float-right"><!--Created at--></p>
+        <h6 id="title"><!--Title--></h6>
+        <p id="content" class=""><!--Content--></p>
+        <div class="d-flex justify-content-between">
+            <p id="user" class="small mb-0 ms-2"><!--User Name--></p>
+            <div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <button id="likeButton" class="text-btn small text-muted mb-0">Like</button>
+                }
+                else
+                {
+                    <span class="small text-muted mb-0">Like</span>
+                }
+                <span id="likeCount" class="small text-muted mb-0"><!--Like Count--></span>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <button id="dislikeButton" class="text-btn small text-muted mb-0">Dislike</button>
+                }
+                else
+                {
+                    <span class="small text-muted mb-0">Dislike</span>
+                }
+                <span id="dislikeCount" class="small text-muted mb-0"><!--Dislike Count--></span>
+            </div>
+        </div>
+    </div>
+</div>
